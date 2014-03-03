@@ -1,0 +1,86 @@
+用户集合  
+user
+{
+  id, //主键  
+  nickName, //昵称
+  token, //访问令牌
+  secretKey,  //密钥
+  profilePhoto,//头像
+  sex,//性别
+  letterName,//姓名首字母  
+  teams : [  
+    {  
+      id,//组主键  
+      name,//组名称  
+      members: [  
+        {  
+          id,//用户主键  
+          nickName,//用户昵称  
+          profilePhoto//用户头像  
+        }  
+      ]  
+    }  
+  ],  
+  groups : [  
+    {  
+      id,//群主键  
+      name//群名称
+    }  
+  ],
+  createDate
+}  
+
+
+群集合
+group
+{
+  id,主键
+  name,名称
+  founder,创始人
+  members : [
+    {
+      id,主键
+      nickName,昵称
+      profilePhoto用户头像
+    }
+  ],
+  createDate
+}
+
+
+单聊记录
+smessage
+{
+  id,
+  messageId,
+  content,
+  attachment : {
+    name,
+    type,(p图片f文件)
+    url,
+    size
+  },
+  from,
+  fromName,
+  to,
+  createDate
+}
+
+
+群聊记录
+gmessage
+{
+  id,
+  messageId,
+  content,
+  attachment : {
+    name,
+    type,(p图片f文件)
+    url,
+    size
+  },
+  from,
+  fromName,
+  to,
+  createDate
+}
