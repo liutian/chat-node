@@ -6,4 +6,5 @@
  * To change this template use File | Settings | File Templates.
  */
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/realtime');
+mongoose.connect('mongodb://localhost/chat');
+mongoose.set('debug',true);
