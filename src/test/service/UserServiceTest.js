@@ -34,6 +34,17 @@ describe('用户相关的接口', function () {
                 profilePhoto : 'xsbh.jpg'
             },done);
     });
+
+    it.skip('获取全部用户列表',function(done){
+        userService.findAllUsers(null,function(err,users){
+            if(err != null){
+                done(err);
+            }else{
+                users.should.not.be.empty;
+                done();
+            }
+        });
+    });
 })
 
 

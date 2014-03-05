@@ -6,5 +6,6 @@
  * To change this template use File | Settings | File Templates.
  */
 var mongoose = require('mongoose');
+require('../app/schema/preLoadSchema.js');
 mongoose.connect('mongodb://localhost/chat');
 mongoose.set('debug',true);

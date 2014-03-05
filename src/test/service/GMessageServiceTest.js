@@ -7,7 +7,7 @@ var mongoose = require('mongoose')
 
 describe('群聊相关的接口', function () {
 
-    it('发送群聊', function (done) {
+    it.skip('发送群聊', function (done) {
         gmessageService.send({
             content : '是ss多少收到',
             from : '5316f2e7d01fc1d8187fb44c',

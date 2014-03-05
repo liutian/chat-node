@@ -137,6 +137,20 @@ exports.editUser = function (user, cb) {
     });
 }
 
+exports.findAllUsers = function(orgId,cb){
+    if(!_.isNumber(orgId)){
+        cb(new BaseError('orgId must be a Number %s',orgId));
+        return;
+    }
+
+    User.find({orgId : orgId},'nickName profilePhoto letterName',function(err,users){
+        if(err){
+            cb(err);
+        }else{
+            cb(null,users);
+        }
+    });
+}
 
 function userValid(user, cb) {
     if (!user.loginName || user.loginName.length <= 0) {
