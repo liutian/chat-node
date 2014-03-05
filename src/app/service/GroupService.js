@@ -59,6 +59,8 @@ exports.join = function (userId, groupId, cb) {
                     cb(err);
                 }else if(!user){
                     cb(new BaseError('this user not exists userId:%',userId));
+                }else if(user.orgId != group.orgId){
+                    cb(new BaseError('this group not belong to this org ,userId:%s orgId:%s ',userId,user.orgId));
                 }else{
                     Group.findByIdAndUpdate(groupId, {$addToSet: {members: userId}}, cb);
                 }
@@ -89,6 +91,19 @@ exports.rename = function (userId, groupId, name, cb) {
             group.name = name;
             group.letterName = letter(name);
             group.save(cb);
+        }
+    });
+}
+
+exports.findGroupsAboutUser = function(userId,cb){
+    Group.find({members : {$all : [userId]}}).populate({
+        path : 'founder members',
+        select : 'nickName profilePhoto sex letterName'
+    }).exec(function(err,groups){
+        if(err){
+            cb(err);
+        }else{
+            cb(null,groups);
         }
     });
 }
