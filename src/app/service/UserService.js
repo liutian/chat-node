@@ -1,13 +1,12 @@
 var mongoose = require('mongoose')
     , crypto = require('crypto')
     , letter = require('../util/letter.js')
-    , log4js = require('log4js')
     , _ = require('underscore')
-    , StringUtil = require('../util/StringUtil.js');
+    , StringUtil = require('../util/StringUtil.js')
+    , BaseError = require('../common/BaseError.js');
 
 
 var User = mongoose.model('user');
-var logger = log4js.getLogger('rlog');
 
 /**
  * @param user
@@ -25,7 +24,7 @@ exports.signIn = function (user, cb) {
     var mUser = new User(user);
 
     if (!user.orgId) {
-        cb(new Error('need orgId'));
+        cb(new BaseError('need orgId'));
         return false;
     }
 
@@ -38,7 +37,7 @@ exports.signIn = function (user, cb) {
             var suffix = '-' + StringUtil.randomLetters(3);
             User.findOne({loginName: mUser.loginName + suffix}, 'loginName', function (data2) {
                 if (data2) {
-                    cb(new Error('this loginName conflict'));
+                    cb(new BaseError('this loginName conflict'));
                 } else {
                     mUser.loginName += suffix;
                     saveUser();
@@ -81,14 +80,14 @@ exports.loginInValid = function (user, cb) {
     }
 
     User.findOne({loginName: user.loginName}, function (err, data) {
-        if (err || !data) cb(new Error('loginName invalid'));
+        if (err || !data) cb(new BaseError('loginName invalid'));
         var md5 = crypto.createHash('md5');
         md5.update(user.pwd);
         var pwdMd5 = md5.digest('hex');
         if (pwdMd5 == data.pwd) {
             cb(null,true);
         } else {
-            cb(new Error('password invalid'));
+            cb(new BaseError('password invalid'));
         }
     });
 }
@@ -111,13 +110,13 @@ exports.editUser = function (user, cb) {
     } else if (user.loginName) {
         queryData.loginName = user.loginName;
     } else {
-        cb(new Error('user args have id or loginName'));
+        cb(new BaseError('user must have id or loginName'));
         return;
     }
 
     User.findOne(queryData,function(err,data){
         if(!data){
-            cb(new Error('not find user'));
+            cb(new BaseError('not find user'));
             return;
         }
 
@@ -141,12 +140,12 @@ exports.editUser = function (user, cb) {
 
 function userValid(user, cb) {
     if (!user.loginName || user.loginName.length <= 0) {
-        cb(new Error('need loginName'));
+        cb(new BaseError('need loginName'));
         return false;
     }
 
     if (!user.pwd || user.pwd.length <= 0) {
-        cb(new Error('need pwd'));
+        cb(new BaseError('need pwd'));
         return false;
     }
 

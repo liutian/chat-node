@@ -1,11 +1,11 @@
 var mongoose = require('mongoose')
     , letter = require('../util/letter.js')
-    , log4js = require('log4js')
-    , _ = require('underscore');
+    , _ = require('underscore')
+    , BaseError = require('../common/BaseError.js');
 
 
 var Group = mongoose.model('group');
-var logger = log4js.getLogger('rlog');
+var User = mongoose.model('user');
 
 /**
  * @param group
@@ -17,70 +17,96 @@ var logger = log4js.getLogger('rlog');
  * }
  * @param cb
  */
-exports.create = function(group,cb){
-    if (!group.orgId) {
-        cb(new Error('need orgId'));
-        return false;
-    }
-    if(!group.name){
-        cb(new Error('need group name'));
+exports.create = function (group, cb) {
+    if (!createValidate(group, cb)) {
         return;
     }
-    if(!group.founder){
-        cb(new Error('need group founder'));
-        return;
-    }
-    var mGroup = new Group(group);
-    mGroup.letterName = letter(mGroup.name);
-    mGroup.save(function(err){
-        cb(err);
+    User.findById(group.founder, function (err, user) {
+        if (err) {
+            cb(err);
+        } else if (!user) {
+            cb(new BaseError('this user not find userId:%s', group.founder));
+        } else {
+            var mGroup = new Group(group);
+            mGroup.members.push(group.founder);
+            mGroup.letterName = letter(mGroup.name);
+            mGroup.save(function (err) {
+                cb(err);
+            });
+        }
     });
 }
 
-exports.disband = function(userId,groupId,cb){
-    Group.findById(groupId,function(err,group){
-        if(!group){
-            cb(new Error('have no group id:' + groupId));
-        }else if(group.founder != userId){
-            cb(new Error('you have no right to delete this group :' + groupId));
-        }else{
+exports.disband = function (userId, groupId, cb) {
+    Group.findById(groupId, function (err, group) {
+        if (!group) {
+            cb(new BaseError('this group not exists groupId:%s', groupId));
+        } else if (group.founder != userId) {
+            cb(new BaseError('you have no right to delete this group , userId:%s groupId:%s', userId, groupId));
+        } else {
             group.remove(cb);
         }
     });
 }
 
-exports.join = function(userId,groupId,cb){
-    Group.findById(groupId,function(err,group){
-        if(!group){
-            cb(new Error('this group not exists :' + groupId));
-        }else{
-            Group.findByIdAndUpdate(groupId,{$addToSet : {members : userId}},cb);
+exports.join = function (userId, groupId, cb) {
+    Group.findById(groupId, function (err, group) {
+        if (!group) {
+            cb(new BaseError('this group not exists ,groupId:%s', groupId));
+        } else {
+            User.findById(userId,function(err,user){
+                if(err){
+                    cb(err);
+                }else if(!user){
+                    cb(new BaseError('this user not exists userId:%',userId));
+                }else{
+                    Group.findByIdAndUpdate(groupId, {$addToSet: {members: userId}}, cb);
+                }
+            });
         }
     });
 }
 
-exports.exit = function(userId,groupId,cb){
-    Group.findById(groupId,function(err,group){
-        if(!group){
-            cb(new Error('this group not exists :' + groupId));
+exports.exit = function (userId, groupId, cb) {
+    Group.findById(groupId, function (err, group) {
+        if (!group) {
+            cb(new BaseError('this group not exists ,groupId:%s', groupId));
+        } else if(group.founder == userId){
+            cb(new BaseError('you can not exit this group because you are founder'));
         }else{
-            Group.findByIdAndUpdate(groupId,{$pull : {members : userId}},cb);
+            Group.findByIdAndUpdate(groupId, {$pull: {members: userId}}, cb);
         }
     });
 }
 
-exports.rename = function(userId,groupId,name,cb){
-    Group.findById(groupId,function(err,group){
-        if(!group){
-            cb(new Error('this group not exists :' + groupId));
-        }else if(group.founder != userId){
-            cb(new Error('you have no right to rename this group :' + groupId));
-        }else{
+exports.rename = function (userId, groupId, name, cb) {
+    Group.findById(groupId, function (err, group) {
+        if (!group) {
+            cb(new BaseError('this group not exists ,groupId:%s', groupId));
+        } else if (group.founder != userId) {
+            cb(new BaseError('you have no right to rename this group ,userId:%s groupId:%s', userId, groupId));
+        } else {
             group.name = name;
             group.letterName = letter(name);
             group.save(cb);
         }
     });
+}
+
+function createValidate(group, cb) {
+    if (!group.orgId) {
+        cb(new BaseError('need orgId'));
+        return false;
+    }
+    if (!group.name) {
+        cb(new BaseError('need group name'));
+        return false;
+    }
+    if (!group.founder) {
+        cb(new BaseError('need group founder'));
+        return false;
+    }
+    return true;
 }
 
 

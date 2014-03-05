@@ -6,11 +6,12 @@ var mongoose = require('mongoose')
 
 describe('私聊相关的接口', function () {
 
-    it('发送私聊', function (done) {
+    it.skip('发送私聊', function (done) {
         smessageService.send({
             content : 'sd',
-            from : '5315a4c4d031dc541abf0eba',
-            to : '5315fb1515b5c1081a5f380f'
+            from : '5316f3384951a8381ac91a40',
+            to : '5316f36f2188eaa40acf7cf8',
+            orgId : 111
         }, done);
     });
 
