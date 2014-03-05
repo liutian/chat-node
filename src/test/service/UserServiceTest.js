@@ -8,8 +8,8 @@ describe('用户相关的接口', function () {
 
     it.skip('注册用户', function (done) {
         userService.signIn({
-            loginName: 'liuss@visionet.com.cn',
-            nickName : '微企员工',
+            loginName: 'liuss111@lang.com',
+            nickName : '北方的狼',
             profilePhoto: 'wqyg.jpg',
             orgId : 2222,
             pwd: '123456'

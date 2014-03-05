@@ -31,7 +31,7 @@ describe('群相关的接口', function () {
         groupService.rename('5316f2e7d01fc1d8187fb44c','5316fd37e2ec20dc19bc1172','你是谁',done);
     });
 
-    it('查询关于用户的所以群',function(done){
+    it.skip('查询关于用户的所以群',function(done){
         groupService.findGroupsAboutUser('5316f3384951a8381ac91a40',function(err,groups){
             if(err){
                 done(err);
