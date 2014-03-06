@@ -6,30 +6,30 @@ var mongoose = require('mongoose')
 var GMessage = mongoose.model('gmessage');
 var Group = mongoose.model('group');
 
-exports.send = function(gmessage,cb){
-    if(!validateGMessage(gmessage,cb)){
+exports.send = function (gmessage, cb) {
+    if (!validateGMessage(gmessage, cb)) {
         return;
     }
 
     Group.findById(gmessage.to, findByIdCallBack);
 
-    function findByIdCallBack(err, group){
+    function findByIdCallBack(err, group) {
         if (err) {
             cb(err);
         } else if (!group) {
-            cb(new BaseError('this group not exists groupId:%s',gmessage.to));
+            cb(new BaseError('this group not exists groupId:%s', gmessage.to));
         } else {
             var mSMessage = new GMessage(gmessage);
             var isMember = false;
             for (var i = 0; i < group.members.length; i++) {
                 if (group.members[i] == gmessage.from) {
                     isMember = true;
-                }else{
+                } else {
                     mSMessage.unread.push(group.members[i]);
                 }
             }
             if (!isMember) {
-                cb(new BaseError('You are not members of the group , userId:%s groupId:%s',gmessage.from,gmessage.to));
+                cb(new BaseError('You are not members of the group , userId:%s groupId:%s', gmessage.from, gmessage.to));
                 return;
             }
             mSMessage.contentText = mSMessage.content;
@@ -38,8 +38,8 @@ exports.send = function(gmessage,cb){
     }
 }
 
-exports.findNewMessage = function(userId,orgId,cb){
-    GMessage.find({orgId : orgId,unread : {$all : [userId]}},'-unread').sort('-createDate').exec(function(err,messages){
+exports.findNewMessage = function (userId, orgId, cb) {
+    GMessage.find({orgId: orgId, unread: {$all: [userId]}}, '-unread').sort('-createDate').exec(function (err, messages) {
         if (err) {
             cb(err);
             return;
@@ -67,20 +67,27 @@ exports.findNewMessage = function(userId,orgId,cb){
     });
 }
 
-function validateGMessage(gmessage,cb){
-    if(!gmessage.content || gmessage.content.length == 0){
+exports.findUnreadMessages = function (userId, groupId, orgId, cb) {
+    GMessage.find({to: groupId, unread: {$all: userId}, orgId: orgId}, '-unread')
+        .populate('from').sort('createDate').exec(function (err, messages) {
+            cb(err, messages);
+        });
+}
+
+function validateGMessage(gmessage, cb) {
+    if (!gmessage.content || gmessage.content.length == 0) {
         cb(new BaseError('gmessage need content'));
         return false;
     }
-    if(!gmessage.from){
+    if (!gmessage.from) {
         cb(new BaseError('gmessage need from'));
         return false;
     }
-    if(!gmessage.to){
+    if (!gmessage.to) {
         cb(new BaseError('gmessage need to'));
         return false;
     }
-    if(!gmessage.orgId){
+    if (!gmessage.orgId) {
         cb(new BaseError('gmessage need orgId'));
         return false;
     }

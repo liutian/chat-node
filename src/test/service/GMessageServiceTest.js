@@ -16,7 +16,7 @@ describe('群聊相关的接口', function () {
         }, done);
     });
 
-    it('接收群聊未读信息',function(done){
+    it.skip('接收群聊未读信息',function(done){
         gmessageService.findNewMessage('5316f30fa32deacc1e99ec80',1111,function(err,messages){
             if(err){
                 done(err);
@@ -26,7 +26,19 @@ describe('群聊相关的接口', function () {
                 done();
             }
         });
-    })
+    });
+
+    it('获取对应群的未读消息',function(done){
+        gmessageService.findUnreadMessages('5316f30fa32deacc1e99ec80','531729fef556d9381af81230',1111,function(err,messages){
+            if(err){
+                done(err);
+            }else{
+                console.log(messages);
+                messages.should.not.be.empty;
+                done();
+            }
+        });
+    });
 
 })
 
