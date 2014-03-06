@@ -43,6 +43,13 @@ exports.findNewMessage = function (userId, orgId, cb) {
         });
 };
 
+exports.findUnreadMessages = function(from, to, orgId, cb){
+    SMessage.find({from : from ,to : to,orgId : orgId,read : 'n'}).sort('createDate')
+        .populate('from').exec(function(err,messages){
+        cb(err,messages);
+    });
+}
+
 function validateSMessage(smessage, cb) {
     if (!smessage.content || smessage.content.length == 0) {
         cb(new BaseError('smessage need content '));
