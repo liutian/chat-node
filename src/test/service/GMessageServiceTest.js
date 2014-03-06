@@ -28,7 +28,7 @@ describe('群聊相关的接口', function () {
         });
     });
 
-    it.skip('获取对应群的未读消息',function(done){
+    it('获取对应群的未读消息',function(done){
         gmessageService.findUnreadMessages('5316f30fa32deacc1e99ec80','531729fef556d9381af81230',1111,function(err,messages){
             if(err){
                 done(err);

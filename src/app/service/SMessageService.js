@@ -43,11 +43,14 @@ exports.findNewMessage = function (userId, orgId, cb) {
         });
 };
 
-exports.findUnreadMessages = function(from, to, orgId, cb){
-    SMessage.find({from : from ,to : to,orgId : orgId,read : 'n'}).sort('createDate')
-        .populate('from').exec(function(err,messages){
-        cb(err,messages);
-    });
+exports.findUnreadMessages = function (from, to, orgId, cb) {
+    SMessage.find({from: from, to: to, orgId: orgId, read: 'n'}).sort('createDate')
+        .exec(function (err, messages) {
+            SMessage.update({from: from, to: to, orgId: orgId, read: 'n'}
+                , {$set: {read: 'y'}},{multi: true},function(){
+                cb(err, messages);
+            });
+        });
 }
 
 function validateSMessage(smessage, cb) {

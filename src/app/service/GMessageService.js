@@ -69,8 +69,11 @@ exports.findNewMessage = function (userId, orgId, cb) {
 
 exports.findUnreadMessages = function (userId, groupId, orgId, cb) {
     GMessage.find({to: groupId, unread: {$all: userId}, orgId: orgId}, '-unread')
-        .populate('from').sort('createDate').exec(function (err, messages) {
-            cb(err, messages);
+        .sort('createDate').exec(function (err, messages) {
+            GMessage.update({to: groupId, unread: {$all: userId}, orgId: orgId}
+                , {$pull: {unread: userId}}, {multi: true}, function () {
+                    cb(err, messages);
+                });
         });
 }
 

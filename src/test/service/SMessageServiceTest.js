@@ -27,8 +27,8 @@ describe('私聊相关的接口', function () {
         });
     });
 
-    it('获取对应用户的未读消息',function(done){
-        smessageService.findUnreadMessages('5317228bb538541c1337b16d','5316f30fa32deacc1e99ec80',1111,function(err,messages){
+    it.skip('获取对应用户的未读消息',function(done){
+        smessageService.findUnreadMessages('5316f2e7d01fc1d8187fb44c','5316f30fa32deacc1e99ec80',1111,function(err,messages){
             if(err){
                 done(err);
             }else{

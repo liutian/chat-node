@@ -19,18 +19,18 @@
     <file path="/GroupService.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394020510034" ignored="false" />
     <file path="/GroupTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1393948108535" ignored="false" />
     <file path="/SMessageSchema.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1393952863245" ignored="false" />
-    <file path="/SMessageService.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394076849953" ignored="false" />
+    <file path="/SMessageService.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394082050303" ignored="false" />
     <file path="/SMessageTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1393950897612" ignored="false" />
     <file path="/GMessageSchema.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1393952548079" ignored="false" />
     <file path="/AttachmentSchema.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1393951155227" ignored="false" />
-    <file path="/GMessageService.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394076254445" ignored="false" />
-    <file path="/GMessageServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394076945159" ignored="false" />
-    <file path="/SMessageServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394025837031" ignored="false" />
+    <file path="/GMessageService.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394082218115" ignored="false" />
+    <file path="/GMessageServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394077579592" ignored="false" />
+    <file path="/SMessageServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394082229125" ignored="false" />
     <file path="/BaseError.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394012582383" ignored="false" />
     <file path="/test.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394001756632" ignored="false" />
     <file path="/fragment.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394012134894" ignored="false" />
     <file path="/UserServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394025101692" ignored="false" />
-    <file path="/GroupServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394070431802" ignored="false" />
+    <file path="/GroupServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394082281896" ignored="false" />
     <file path="/initSchema.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394017371404" ignored="false" />
     <file path="/fun.txt" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394020654949" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -52,28 +52,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="SMessageService.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/service/SMessageService.js">
+      <file leaf-file-name="GMessageService.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/app/service/GMessageService.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="25" selection-start="1645" selection-end="1645" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SMessageServiceTest.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/service/SMessageServiceTest.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="55" selection-start="895" selection-end="895" vertical-scroll-proportion="0.3364486">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SMessageSchema.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app/schema/SMessageSchema.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="8" selection-start="295" selection-end="299" vertical-scroll-proportion="0.0">
+            <state line="71" column="30" selection-start="2343" selection-end="2343" vertical-scroll-proportion="0.5">
               <folding />
             </state>
           </provider>
@@ -100,11 +82,11 @@
         <option value="$PROJECT_DIR$/src/app/service/GroupService.js" />
         <option value="$PROJECT_DIR$/fun.txt" />
         <option value="$PROJECT_DIR$/src/test/service/UserServiceTest.js" />
-        <option value="$PROJECT_DIR$/src/test/service/GroupServiceTest.js" />
-        <option value="$PROJECT_DIR$/src/app/service/GMessageService.js" />
         <option value="$PROJECT_DIR$/src/app/service/SMessageService.js" />
-        <option value="$PROJECT_DIR$/src/test/service/GMessageServiceTest.js" />
+        <option value="$PROJECT_DIR$/src/app/service/GMessageService.js" />
         <option value="$PROJECT_DIR$/src/test/service/SMessageServiceTest.js" />
+        <option value="$PROJECT_DIR$/src/test/service/GroupServiceTest.js" />
+        <option value="$PROJECT_DIR$/src/test/service/GMessageServiceTest.js" />
       </list>
     </option>
   </component>
@@ -313,6 +295,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chat-node" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chat-node" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="schema" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -492,7 +496,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="48" />
+      <option name="time" value="50" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -511,20 +515,6 @@
     <entry file="file://$PROJECT_DIR$/src/test/init.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="42" selection-start="234" selection-end="234" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/schema/GroupSchema.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="11" selection-start="283" selection-end="290" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/service/GroupService.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="54" selection-start="3285" selection-end="3285" vertical-scroll-proportion="0.66117644">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fun.txt">
@@ -546,13 +536,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/service/GroupServiceTest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="36" selection-start="477" selection-end="477" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/schema/GMessageSchema.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="8" selection-start="332" selection-end="336" vertical-scroll-proportion="0.5438067">
@@ -560,44 +543,65 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/schema/UserSchema.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="6" selection-start="469" selection-end="469" vertical-scroll-proportion="0.10876133">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/service/GMessageService.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="65" selection-start="2201" selection-end="2227" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/schema/SMessageSchema.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="8" selection-start="295" selection-end="299" vertical-scroll-proportion="0.0">
+        <state line="9" column="8" selection-start="295" selection-end="299" vertical-scroll-proportion="0.35827664">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/schema/GroupSchema.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="8" selection-start="101" selection-end="105" vertical-scroll-proportion="0.3364486">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/schema/UserSchema.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="12" selection-start="149" selection-end="157" vertical-scroll-proportion="0.27210885">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/service/SMessageService.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="25" selection-start="1645" selection-end="1645" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/service/GMessageServiceTest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="11" selection-start="853" selection-end="853" vertical-scroll-proportion="0.5471698">
+        <state line="49" column="51" selection-start="1717" selection-end="1731" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/service/SMessageServiceTest.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="55" selection-start="895" selection-end="895" vertical-scroll-proportion="0.3364486">
+        <state line="29" column="11" selection-start="814" selection-end="814" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/service/GroupService.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="7" selection-start="3345" selection-end="3345" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/service/GroupServiceTest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="11" selection-start="987" selection-end="987" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/service/GMessageServiceTest.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="35" selection-start="913" selection-end="913" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/service/GMessageService.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="71" column="30" selection-start="2343" selection-end="2343" vertical-scroll-proportion="0.5">
           <folding />
         </state>
       </provider>
