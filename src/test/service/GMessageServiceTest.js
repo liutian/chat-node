@@ -9,12 +9,24 @@ describe('群聊相关的接口', function () {
 
     it.skip('发送群聊', function (done) {
         gmessageService.send({
-            content : '是ss多少收到',
-            from : '5316f2e7d01fc1d8187fb44c',
-            to : '5316fd37e2ec20dc19bc1172',
-            orgId : 111
+            content : 'ree',
+            from : '5317228bb538541c1337b16d',
+            to : '531729fef556d9381af81230',
+            orgId : 1111
         }, done);
     });
+
+    it('接收群聊未读信息',function(done){
+        gmessageService.findNewMessage('5316f30fa32deacc1e99ec80',1111,function(err,messages){
+            if(err){
+                done(err);
+            }else{
+                console.log(messages);
+                messages.should.not.be.empty;
+                done();
+            }
+        });
+    })
 
 })
 

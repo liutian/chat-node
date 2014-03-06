@@ -9,8 +9,8 @@ describe('群相关的接口', function () {
 
     it.skip('创建群', function (done) {
         groupService.create({
-            name : '全面战争',
-            founder : '5316f3384951a8381ac91a40',
+            name : '微企客服555',
+            founder : '5317226274dffeb41c9ba303',
             orgId : 1111
         }, done);
     });
@@ -20,7 +20,7 @@ describe('群相关的接口', function () {
     });
 
     it.skip('加入群',function(done){
-        groupService.join('5316f36f2188eaa40acf7cf8','5316fd37e2ec20dc19bc1172',done);
+        groupService.join('53172276262e6e7812b9d629','531729fef556d9381af81230',done);
     });
 
     it.skip('退出群',function(done){
