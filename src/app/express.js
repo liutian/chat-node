@@ -11,7 +11,6 @@ app.sessionStore = sessionStore;
 //fetch sid from req.url for session
 var sidRegExp = /;sid=(.+)$/i;
 app.stack.unshift({ route: '', handle: function(req,res,next){
-	console.log('have connect111');
 	var m = req.url.match(sidRegExp);
 	if(m && m[1]){
 		req.headers.cookie = 'sid=' + m[1] + ';' + (req.headers.cookie ? req.headers.cookie : '');
@@ -33,9 +32,7 @@ app.use(express.cookieParser('liuss123'));
 app.use(express.session({ key : 'sid',store: sessionStore }));
 
 app.use('/api',function(req,res,next){
-	console.log('/api user');
 	if(!req.session.user){
-		console.log('/api user Unauthorized');
 		res.json({code : 401,msg : 'Unauthorized'});
 	}else{
 		next();
