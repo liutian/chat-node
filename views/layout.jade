@@ -1,7 +1,15 @@
 doctype html
-html
+html(ng-app="vsModule")
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
+    style(src="/javascripts/uploadify/uploadify.css")
+  body(ng-controller="ctrl")
     block content
+
+    script(src="/socket.io/socket.io.js")
+    script(src="/javascripts/jquery/jquery.js")
+    script(src="/javascripts/angular/angular.js")
+    script(src="/javascripts/uploadify/jquery.uploadify.js")
+    script(src="/javascripts/index.js")
+    script(src="/javascripts/uploadifyDirective.js")

@@ -1,5 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+
+  input(ng-model="username")
+  input(ng-model="password")
+  button(type="button",ng-click="login()") login
+  button(type="button",ng-click="getData()") getData
+  span(uploadify-directive="uploadConfig",id="upload-btn")

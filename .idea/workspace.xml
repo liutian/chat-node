@@ -23,16 +23,63 @@
     <file path="/SMessageTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1393950897612" ignored="false" />
     <file path="/GMessageSchema.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1393952548079" ignored="false" />
     <file path="/AttachmentSchema.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1393951155227" ignored="false" />
-    <file path="/GMessageService.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394082218115" ignored="false" />
+    <file path="/GMessageService.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394085194126" ignored="false" />
     <file path="/GMessageServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394077579592" ignored="false" />
     <file path="/SMessageServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394082229125" ignored="false" />
     <file path="/BaseError.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394012582383" ignored="false" />
     <file path="/test.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394001756632" ignored="false" />
-    <file path="/fragment.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394012134894" ignored="false" />
+    <file path="/fragment.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396937983498" ignored="false" />
     <file path="/UserServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394025101692" ignored="false" />
     <file path="/GroupServiceTest.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394082281896" ignored="false" />
     <file path="/initSchema.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394017371404" ignored="false" />
     <file path="/fun.txt" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1394020654949" ignored="false" />
+    <file path="/socket.app.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1395640448094" ignored="false" />
+    <file path="/app.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397196616363" ignored="false" />
+    <file path="/index.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397214149375" ignored="false" />
+    <file path="/user.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397214659410" ignored="false" />
+    <file path="/layout.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396873211549" ignored="false" />
+    <file path="/index.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396873588158" ignored="false" />
+    <file path="/crossdomain.xml" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396877977489" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/public/index.html" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396954080623" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/template/message/_general.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397193200277" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/vendor/wysihtml5/wysihtml5-0.3.0.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396950701999" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/public/common/vendor.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396952856250" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/vendor/chosen/public/chosen.jquery.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396943804245" ignored="false" />
+    <file path="/chosen.jquery.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1396943803646" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/public/common/angular.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397197645084" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/controller/message/pubMessageController.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397210119906" ignored="false" />
+    <file path="/pubMessageController.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397192953901" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/public/sloth.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397203904417" ignored="false" />
+    <file path="E:/tmp/jpush/app.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397125890497" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/common/scss/_message.scss" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397193200277" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/template/message/_voting_content.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397183075001" ignored="false" />
+    <file path="/_voting_content.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397183083353" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/template/message/new.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397204827306" ignored="false" />
+    <file path="/new.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397191859445" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/public/sloth.css" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397184752429" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/directive/chosenDirective.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397193200277" ignored="false" />
+    <file path="/chosenDirective.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397190118246" ignored="false" />
+    <file path="/_general.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397192914059" ignored="false" />
+    <file path="/_message.scss" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397192614156" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/controller/sinaController.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397193200277" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/template/message/_toolbox.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397204827306" ignored="false" />
+    <file path="/_toolbox.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397204333573" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/common/jade/_navbar.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397200065184" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/controller/questionDetailController.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397194105058" ignored="false" />
+    <file path="/express.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397206759027" ignored="false" />
+    <file path="/socket.io.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397206815431" ignored="false" />
+    <file path="/_navbar.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397197832562" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/common/scss/_header.scss" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397212462469" ignored="false" />
+    <file path="/_header.scss" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397198159569" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/controller/message/messageDetailController.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397198723838" ignored="false" />
+    <file path="/messageDetailController.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397198597675" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/template/message/_message_item.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397204827306" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/controller/message/messageListController.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397204827306" ignored="false" />
+    <file path="/messageListController.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397204224309" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/service/REST/messageRESTFactory.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397204827306" ignored="false" />
+    <file path="/messageRESTFactory.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397203036439" ignored="false" />
+    <file path="D:/workspance/sloth2/WebContent/source/template/message/_agenda.jade" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397209213667" ignored="false" />
+    <file path="/upload.js" changelist="63749bce-ee8a-456f-a316-7c0e7371fd25" time="1397215118251" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,10 +99,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="GMessageService.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/app/service/GMessageService.js">
+      <file leaf-file-name="index.jade" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/views/index.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="71" column="30" selection-start="2343" selection-end="2343" vertical-scroll-proportion="0.5">
+            <state line="7" column="43" selection-start="181" selection-end="181" vertical-scroll-proportion="0.49282297">
               <folding />
             </state>
           </provider>
@@ -71,22 +118,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/app/schema/UserSchema.js" />
-        <option value="$PROJECT_DIR$/src/app/common/test.js" />
-        <option value="$PROJECT_DIR$/src/app/common/BaseError.js" />
-        <option value="$PROJECT_DIR$/src/app/util/letter.js" />
-        <option value="$PROJECT_DIR$/src/app/schema/GroupSchema.js" />
-        <option value="$PROJECT_DIR$/src/app/schema/initSchema.js" />
-        <option value="$PROJECT_DIR$/src/test/init.js" />
-        <option value="$PROJECT_DIR$/src/app/service/UserService.js" />
-        <option value="$PROJECT_DIR$/src/app/service/GroupService.js" />
-        <option value="$PROJECT_DIR$/fun.txt" />
-        <option value="$PROJECT_DIR$/src/test/service/UserServiceTest.js" />
-        <option value="$PROJECT_DIR$/src/app/service/SMessageService.js" />
-        <option value="$PROJECT_DIR$/src/app/service/GMessageService.js" />
-        <option value="$PROJECT_DIR$/src/test/service/SMessageServiceTest.js" />
-        <option value="$PROJECT_DIR$/src/test/service/GroupServiceTest.js" />
-        <option value="$PROJECT_DIR$/src/test/service/GMessageServiceTest.js" />
+        <option value="$PROJECT_DIR$/socket.app.js" />
+        <option value="$PROJECT_DIR$/routes/login.js" />
+        <option value="$PROJECT_DIR$/routes/user.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/uploadifyDirective.js" />
+        <option value="$PROJECT_DIR$/views/layout.jade" />
+        <option value="$PROJECT_DIR$/views/index.jade" />
+        <option value="$PROJECT_DIR$/public/crossdomain.xml" />
+        <option value="$PROJECT_DIR$/test.js" />
+        <option value="$PROJECT_DIR$/routes/index.js" />
+        <option value="$PROJECT_DIR$/src/app/controller/index.js" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/src/app/socket.io.js" />
+        <option value="$PROJECT_DIR$/src/app/express.js" />
+        <option value="$PROJECT_DIR$/src/app/controller/user.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/index.js" />
+        <option value="$PROJECT_DIR$/src/app/controller/upload.js" />
       </list>
     </option>
   </component>
@@ -186,7 +233,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -215,7 +261,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -230,99 +276,12 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chat-node" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chat-node" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chat-node" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chat-node" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chat-node" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chat-node" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chat-node" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="chat-node" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="schema" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -332,20 +291,40 @@
     <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\chat-node\public\javascripts" />
+      <recent name="E:\chat-node\node_modules" />
+      <recent name="E:\chat-node\src\app\common" />
       <recent name="E:\chat-node\src\app\schema" />
       <recent name="E:\chat-node\src\test\service" />
-      <recent name="E:\chat-node\src\app\service" />
-      <recent name="E:\chat" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\chat-node\src\app\controller" />
+      <recent name="E:\chat-node\public\javascripts" />
     </key>
   </component>
-  <component name="RunManager" selected="Node.js.mocha">
+  <component name="RunManager" selected="Node.js.app.js">
     <configuration default="false" name="StringUtil.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-node="C:/Program Files/nodejs/node" path-to-js-file="StringUtil.js" working-dir="$PROJECT_DIR$/src/app/util">
       <RunnerSettings RunnerId="NodeJS.run" />
+      <ConfigurationWrapper RunnerId="NodeJS.run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="socket.app.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-node="C:/Program Files/nodejs/node" path-to-js-file="socket.app.js" working-dir="$PROJECT_DIR$">
+      <RunnerSettings RunnerId="NodeJS.debug" />
+      <RunnerSettings RunnerId="NodeJS.run" />
+      <ConfigurationWrapper RunnerId="NodeJS.debug" />
+      <ConfigurationWrapper RunnerId="NodeJS.run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="app.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" path-to-node="C:/Program Files/nodejs/node" path-to-js-file="app.js" working-dir="$PROJECT_DIR$">
+      <RunnerSettings RunnerId="NodeJS.debug" />
+      <RunnerSettings RunnerId="NodeJS.run" />
+      <ConfigurationWrapper RunnerId="NodeJS.debug" />
       <ConfigurationWrapper RunnerId="NodeJS.run" />
       <method />
     </configuration>
@@ -369,21 +348,44 @@
     </configuration>
     <configuration default="false" name="app" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="C:/Program Files/nodejs/node" path-to-js-file="app.js" working-dir="$PROJECT_DIR$">
       <RunnerSettings RunnerId="NodeJS.debug" />
+      <RunnerSettings RunnerId="NodeJS.run" />
       <ConfigurationWrapper RunnerId="NodeJS.debug" />
+      <ConfigurationWrapper RunnerId="NodeJS.run" />
       <method />
     </configuration>
-    <list size="3">
+    <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Node.js.mocha" />
       <item index="1" class="java.lang.String" itemvalue="Node.js.app" />
       <item index="2" class="java.lang.String" itemvalue="Node.js.StringUtil.js" />
+      <item index="3" class="java.lang.String" itemvalue="Node.js.socket.app.js" />
+      <item index="4" class="java.lang.String" itemvalue="Node.js.app.js" />
     </list>
     <recent_temporary>
-      <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="Node.js.StringUtil.js" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Node.js.app.js" />
+        <item index="1" class="java.lang.String" itemvalue="Node.js.socket.app.js" />
+        <item index="2" class="java.lang.String" itemvalue="Node.js.StringUtil.js" />
       </list>
     </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="all">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="63749bce-ee8a-456f-a316-7c0e7371fd25" name="Default" comment="" />
@@ -419,11 +421,11 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24944155" sideWeight="0.7955707" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2044293" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24869695" sideWeight="0.7563884" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24361159" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.08006536" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3713799" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -496,112 +498,110 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="50" />
+      <option name="time" value="99" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/util/letter.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/socket.io/lib/namespace.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="385" column="18" selection-start="28368" selection-end="28369" vertical-scroll-proportion="43.384617" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/schema/preLoadSchema.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="18" selection-start="145" selection-end="145" vertical-scroll-proportion="0.41142857">
+        <state line="203" column="28" selection-start="3613" selection-end="3613" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/init.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/express/node_modules/connect/lib/connect.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="42" selection-start="234" selection-end="234" vertical-scroll-proportion="0.0" />
+        <state line="15" column="28" selection-start="281" selection-end="305" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fun.txt">
+    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/application.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="21" selection-start="162" selection-end="162" vertical-scroll-proportion="0.0" />
+        <state line="492" column="16" selection-start="11201" selection-end="11201" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/service/UserService.js">
+    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/utils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="140" column="0" selection-start="3293" selection-end="3293" vertical-scroll-proportion="-0.2318339">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/express/node_modules/connect/lib/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.244156" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/log4js/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="32" selection-start="435" selection-end="435" vertical-scroll-proportion="1.6901408" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/socket.io.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="36" selection-start="287" selection-end="287" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/service/UserServiceTest.js">
+    <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="11" selection-start="210" selection-end="210" vertical-scroll-proportion="0.21052632">
+        <state line="10" column="37" selection-start="186" selection-end="186" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/schema/GMessageSchema.js">
+    <entry file="file://$PROJECT_DIR$/src/app/express.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="8" selection-start="332" selection-end="336" vertical-scroll-proportion="0.5438067">
+        <state line="37" column="0" selection-start="1192" selection-end="1192" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/schema/SMessageSchema.js">
+    <entry file="file://$PROJECT_DIR$/public/javascripts/angular/angular.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="8" selection-start="295" selection-end="299" vertical-scroll-proportion="0.35827664">
+        <state line="2021" column="16" selection-start="58821" selection-end="58829" vertical-scroll-proportion="0.0">
+          <folding>
+            <marker date="1396081216955" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1396081216955" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1396081216955" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/controller/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="25" selection-start="649" selection-end="654" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/schema/GroupSchema.js">
+    <entry file="file://$PROJECT_DIR$/public/javascripts/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="8" selection-start="101" selection-end="105" vertical-scroll-proportion="0.3364486">
+        <state line="8" column="32" selection-start="290" selection-end="290" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/schema/UserSchema.js">
+    <entry file="file://$PROJECT_DIR$/src/app/controller/user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="12" selection-start="149" selection-end="157" vertical-scroll-proportion="0.27210885">
+        <state line="5" column="0" selection-start="168" selection-end="168" vertical-scroll-proportion="0.28148147">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/service/SMessageService.js">
+    <entry file="file://$PROJECT_DIR$/src/app/controller/upload.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="51" selection-start="1717" selection-end="1731" vertical-scroll-proportion="0.0">
+        <state line="10" column="34" selection-start="388" selection-end="388" vertical-scroll-proportion="0.54814816">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/service/SMessageServiceTest.js">
+    <entry file="file://$PROJECT_DIR$/views/index.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="11" selection-start="814" selection-end="814" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/service/GroupService.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="103" column="7" selection-start="3345" selection-end="3345" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/service/GroupServiceTest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="11" selection-start="987" selection-end="987" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/service/GMessageServiceTest.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="35" selection-start="913" selection-end="913" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/service/GMessageService.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="30" selection-start="2343" selection-end="2343" vertical-scroll-proportion="0.5">
+        <state line="7" column="43" selection-start="181" selection-end="181" vertical-scroll-proportion="0.49282297">
           <folding />
         </state>
       </provider>
