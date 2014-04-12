@@ -9,6 +9,8 @@ require('./src/log')({
 	level : process.env.NODE_ENV != 'development' ? 'ERROR' : ''
 });
 
+require('./src/app/schema');
+
 var http = require('http'),
 	express = require('./src/app/express'),
 	log4js = require('log4js'),
