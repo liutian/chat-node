@@ -3,7 +3,6 @@ var fs = require('fs');
 module.exports = function(app){
 	app.all('*', function(req, res, next){
 		if (!req.get('Origin')) return next();
-		console.log('have connect222');
 		// use "*" here to accept any origin
 		res.set('Access-Control-Allow-Origin', 'http://192.168.1.103:8080');
 		res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
