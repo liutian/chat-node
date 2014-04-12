@@ -5,7 +5,6 @@
  * Time: 下午5:09
  * To change this template use File | Settings | File Templates.
  */
-var mongoose = require('mongoose');
+
 require('../app/schema');
-mongoose.connect('mongodb://localhost/chat');
 mongoose.set('debug',true);
