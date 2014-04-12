@@ -20,7 +20,7 @@ var User = mongoose.model('user');
  * }
  * @param cb
  */
-exports.signIn = function (user, cb) {
+exports.signUp = function (user, cb) {
     var mUser = new User(user);
 
     if (!user.orgId) {
@@ -74,7 +74,7 @@ exports.signIn = function (user, cb) {
  * }
  * @param cb
  */
-exports.loginInValid = function (user, cb) {
+exports.loginIn = function (user, cb) {
     if (!userValid(user,cb)) {
         return;
     }

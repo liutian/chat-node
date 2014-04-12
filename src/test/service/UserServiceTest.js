@@ -7,7 +7,7 @@ var mongoose = require('mongoose')
 describe('用户相关的接口', function () {
 
     it.skip('注册用户', function (done) {
-        userService.signIn({
+        userService.signUp({
             loginName: 'liuss111@lang.com',
             nickName : '北方的狼',
             profilePhoto: 'wqyg.jpg',
@@ -17,7 +17,7 @@ describe('用户相关的接口', function () {
     });
 
     it.skip('用户登录验证', function (done) {
-        userService.loginInValid({
+        userService.loginIn({
             loginName : '1191577401@qq.com',
             pwd : '123456'
         }, function (err) {
