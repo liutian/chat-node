@@ -1,8 +1,11 @@
 var express = require('express'),
 	controller = require('./controller'),
 	path = require('path'),
+	domain = require('domain'),
+	log4js = require('log4js'),
 	connectRedis = require('connect-redis');
 
+var logger = log4js.getLogger();
 var RedisStore = connectRedis(express);
 var sessionStore = new RedisStore({host : '127.0.0.1',port : 6379,ttl : 1800});
 var app = express();
@@ -16,7 +19,19 @@ app.stack.unshift({ route: '', handle: function(req,res,next){
 		req.headers.cookie = 'sid=' + m[1] + ';' + (req.headers.cookie ? req.headers.cookie : '');
 		req.url = req.url.replace(sidRegExp,'');
 	}
-	next();
+
+	var d = domain.create();
+	//监听domain的错误事件
+	d.on('error', function (err) {
+		logger.error(err);
+		res.statusCode = 500;
+//		d.dispose();
+	});
+
+	d.add(req);
+	d.add(res);
+	d.run(next);
+
 } });
 
 // all environments
