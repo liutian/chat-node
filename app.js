@@ -2,6 +2,8 @@ process.env.NODE_ENV = 'development';
 /**
  * Module dependencies.
  */
+require('./src/prop.js');
+
 require('./src/log')({
 	dir : __dirname + '/log/',
 	level : process.env.NODE_ENV != 'development' ? 'ERROR' : ''
