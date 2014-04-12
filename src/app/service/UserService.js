@@ -80,7 +80,10 @@ exports.loginIn = function (user, cb) {
     }
 
     User.findOne({loginName: user.loginName}, function (err, data) {
-        if (err || !data) cb(new BaseError('loginName invalid'));
+        if (err || !data) {
+	        cb(new BaseError('loginName invalid'));
+	        return;
+        }
         var md5 = crypto.createHash('md5');
         md5.update(user.pwd);
         var pwdMd5 = md5.digest('hex');
