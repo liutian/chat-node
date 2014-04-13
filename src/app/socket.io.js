@@ -5,6 +5,7 @@ var socketIO = require('socket.io'),
 
 module.exports = function (server) {
 	var io = socketIO.listen(server);
+	global.appData.socketIO = {sockets: {},io : io};
 
 	io.set('authorization', function (handshakeData, callback) {
 		if (handshakeData.headers.cookie) {
@@ -35,10 +36,6 @@ module.exports = function (server) {
 	});
 
 	function saveSockets(socketId) {
-		if (!global.appData.socketIO) {
-			global.appData.socketIO = {sockets: {}};
-		}
-
 		var _sockets = global.appData.socketIO.sockets;
 
 		if (!io.handshaken[socketId]) return;
@@ -58,7 +55,6 @@ module.exports = function (server) {
 				for(var j = 0;j < _sockets[sess.user.id].length;j++){
 					var _socketId = _sockets[sess.user.id][j];
 					if(!io.transports[_socketId] || !io.transports[_socketId].open){
-						console.log('splice ' + j + ' id:' + _sockets[sess.user.id][j]);
 						_sockets[sess.user.id].splice(j,1);
 						j--;
 					}
