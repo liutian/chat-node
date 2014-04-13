@@ -88,7 +88,7 @@ exports.loginIn = function (user, cb) {
         md5.update(user.pwd);
         var pwdMd5 = md5.digest('hex');
         if (pwdMd5 == data.pwd) {
-            cb(null,true);
+            cb(null,{id : data.id,orgId : data.orgId});
         } else {
             cb(new BaseError('password invalid'));
         }

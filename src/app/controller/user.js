@@ -2,9 +2,9 @@ var userService = require('../../app/service/UserService.js');
 
 module.exports = function(app){
 	app.post('/login', function(req, res){
-		userService.loginIn(req.body,function(err){
+		userService.loginIn(req.body,function(err,udata){
 			if(!err && err == null){
-				req.session.user = {loginName : req.body.loginName};
+				req.session.user = udata;
 				res.json({code : 10000});
 			}else{
 				delete req.session.user;
