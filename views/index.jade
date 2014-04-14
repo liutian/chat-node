@@ -10,3 +10,13 @@ block content
   input(ng-model="toUserId")
   button(type="button",ng-click="whisper()") whisper
   button(type="button",ng-click="broadcast()") broadcast
+  br
+  input(ng-model="joinRoomName")
+  button(type="button",ng-click="joinRoom()") joinRoom
+  br
+  input(ng-model="leaveRoomName")
+  button(type="button",ng-click="leaveRoom()") leaveRoom
+  br
+  input(ng-model="roomName")
+  input(ng-model="roomContent")
+  button(type="button",ng-click="roomSend()") roomSend

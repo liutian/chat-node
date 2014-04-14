@@ -50,12 +50,16 @@ module.controller('ctrl', function ($scope, $http) {
 		socket = io.connect('http://localhost:3000');
 
 		socket.on('whisper',function(data){
-			alert('whisper:' + data.content);
+			alert('whisper:' + JSON.stringify(data));
 		});
 
 		socket.on('broadcast',function(data){
-			alert('broadcast data:' + data);
-		})
+			alert('broadcast data:' + JSON.stringify(data));
+		});
+
+		socket.on('groupChat',function(data){
+			alert('groupChat data:' + JSON.stringify(data));
+		});
 	}
 
 	$scope.whisper = function(){
@@ -67,6 +71,24 @@ module.controller('ctrl', function ($scope, $http) {
 	$scope.broadcast = function(){
 		if(socket){
 			socket.emit('broadcast',{content : '你好'});
+		}
+	}
+
+	$scope.joinRoom = function(){
+		if(socket){
+			socket.emit('groupChat',{type : 'join',groupId : $scope.joinRoomName});
+		}
+	}
+
+	$scope.leaveRoom = function(){
+		if(socket){
+			socket.emit('groupChat',{type : 'leave',groupId : $scope.leaveRoomName});
+		}
+	}
+
+	$scope.roomSend = function(){
+		if(socket){
+			socket.emit('groupChat',{type : 'message',groupId : $scope.roomName,content : $scope.roomContent});
 		}
 	}
 });
