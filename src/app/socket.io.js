@@ -40,6 +40,10 @@ module.exports = function (server) {
 				webSocketService.groupChat(data.groupId,socket.$$userId,data);
 			}
 		});
+
+		socket.on('broadcast',function(data){
+			socket.broadcast.emit('broadcast',data);
+		});
 	});
 
 	function saveSockets(socket) {
@@ -62,7 +66,7 @@ module.exports = function (server) {
 
 				for(var j = 0;j < _sockets[sess.user.id].length;j++){
 					var _socketId = _sockets[sess.user.id][j];
-					if(!io.transports[_socketId] || !io.transports[_socketId].open){
+					if(!io.sockets.sockets[_socketId]){
 						_sockets[sess.user.id].splice(j,1);
 						j--;
 					}

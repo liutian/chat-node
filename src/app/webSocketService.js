@@ -3,7 +3,7 @@ exports.whisper = function(userId,data){
 	var io = global.appData.socketIO.io;
 
 	iteratorSockets(_sockets,function(socketId){
-		io.transports[socketId].emit('whisper',data);
+		io.sockets.sockets[socketId].emit('whisper',data);
 	});
 }
 
@@ -32,7 +32,7 @@ function iteratorSockets(sockets,cb){
 	if(sockets && sockets.length > 0){
 		for(var i = 0;i < sockets.length;i++){
 			var _socketId = sockets[i];
-			if(!io.transports[_socketId] || !io.transports[_socketId].open){
+			if(!io.sockets.sockets[_socketId]){
 				sockets.splice(i,1);
 				i--;
 			}else{
