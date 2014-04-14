@@ -1,13 +1,13 @@
-exports.whisper = function(userId,event,data){
+exports.whisper = function(userId,data){
 	var _sockets = global.appData.socketIO.sockets[userId];
 	var io = global.appData.socketIO.io;
 
 	iteratorSockets(_sockets,function(socketId){
-		io.transports[socketId].send(event,data);
+		io.transports[socketId].emit('whisper',data);
 	});
 }
 
-exports.groupChat = function(groupId,selfUserId,event,data){
+exports.groupChat = function(groupId,selfUserId,data){
 	var _sockets = global.appData.socketIO.sockets[selfUserId];
 	var io = global.appData.socketIO.io;
 	var bool = false;
@@ -22,7 +22,7 @@ exports.groupChat = function(groupId,selfUserId,event,data){
 	});
 
 	if(bool){
-		io.sockets.emit(event,data);
+		io.sockets.emit('groupChat',data);
 	}
 }
 

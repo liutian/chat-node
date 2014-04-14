@@ -1,5 +1,6 @@
 var socketIO = require('socket.io'),
 	express = require('./express'),
+	webSocketService = require('./webSocketService'),
 	cookie = require('../../node_modules/express/node_modules/cookie'),
 	utils = require('../../node_modules/express/node_modules/connect/lib/utils');
 
@@ -29,13 +30,20 @@ module.exports = function (server) {
 	});
 
 	io.sockets.on('connection', function (socket) {
-		saveSockets(socket.id);
-		socket.on('my other event', function (data) {
+		saveSockets(socket);
+		socket.on('whisper', function (data) {
+			webSocketService.whisper(data.toUserId,data);
+		});
 
+		socket.on('groupChat', function (data) {
+			if(socket.$$userId){
+				webSocketService.groupChat(data.groupId,socket.$$userId,data);
+			}
 		});
 	});
 
-	function saveSockets(socketId) {
+	function saveSockets(socket) {
+		var socketId = socket.id;
 		var _sockets = global.appData.socketIO.sockets;
 
 		if (!io.handshaken[socketId]) return;
@@ -62,6 +70,7 @@ module.exports = function (server) {
 
 				if(_sockets[sess.user.id].indexOf(socketId) == -1){
 					_sockets[sess.user.id].unshift(socketId);
+					socket.$$userId = sess.user.id;
 				}
 			}
 		});
