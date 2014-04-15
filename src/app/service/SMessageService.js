@@ -4,12 +4,21 @@ var mongoose = require('mongoose')
 
 
 var SMessage = mongoose.model('smessage');
+var User = mongoose.model('user');
 
 exports.send = function (smessage, cb) {
     if (validateSMessage(smessage, cb)) {
-        var mSMessage = new SMessage(smessage);
-        mSMessage.contentText = mSMessage.content;
-        mSMessage.save(cb);
+	    User.findById(smessage.to,function(err,user){
+		    if(err){
+			    cb(err);
+		    }else if(!user){
+			    cb(new BaseError('message to:%s not exists ', smessage.to));
+		    }else{
+		        var mSMessage = new SMessage(smessage);
+		        mSMessage.contentText = mSMessage.content;
+		        mSMessage.save(cb);
+		    }
+	    });
     }
 }
 
