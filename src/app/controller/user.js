@@ -11,9 +11,9 @@ module.exports = function(app){
 				req.session.user = udata;
 				res.json({code : 10000});
 			}else{
-				logger.error(new BaseError(BaseError.ERROR,'login fail'));
+				logger.error(err);
 				delete req.session.user;
-				res.json({code : 10001,msg : 'invalid username password!'});
+				res.json({code : 10001,msg : err.message});
 			}
 		});
 	});

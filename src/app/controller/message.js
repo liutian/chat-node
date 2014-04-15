@@ -16,7 +16,7 @@ module.exports = function(app){
 		gmessageService.send(gmessage,function(err){
 			if(err){
 				logger.error(err);
-				res.json({code : 10001,msg : 'save gmessage error'});
+				res.json({code : 10001,msg : err.message});
 				return;
 			}
 
@@ -35,7 +35,7 @@ module.exports = function(app){
 		smessageService.send(smessage,function(err){
 			if(err){
 				logger.error(err);
-				res.json({code : 10001,msg : 'save smessage error'});
+				res.json({code : 10001,msg : err.message});
 				return;
 			}
 
