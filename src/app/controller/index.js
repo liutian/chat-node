@@ -1,6 +1,7 @@
 var fs = require('fs');
 
 module.exports = function(app){
+	//cors
 	app.all('*', function(req, res, next){
 		if (!req.get('Origin')) return next();
 		// use "*" here to accept any origin

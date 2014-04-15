@@ -1,4 +1,8 @@
-var userService = require('../../app/service/UserService.js');
+var userService = require('../../app/service/UserService.js'),
+	BaseError = require('../common/BaseError'),
+	log4js = require('log4js');
+
+var logger = log4js.getLogger();
 
 module.exports = function(app){
 	app.post('/login', function(req, res){
@@ -7,6 +11,7 @@ module.exports = function(app){
 				req.session.user = udata;
 				res.json({code : 10000});
 			}else{
+				logger.error(new BaseError(BaseError.ERROR,'login fail'));
 				delete req.session.user;
 				res.json({code : 10001,msg : 'invalid username password!'});
 			}

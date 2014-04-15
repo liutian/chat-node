@@ -20,7 +20,7 @@ describe('群相关的接口', function () {
     });
 
     it.skip('加入群',function(done){
-        groupService.join('53172276262e6e7812b9d629','531729fef556d9381af81230',done);
+        groupService.join('534b913a58d966a81afdfeb2','53172a2efb759cc41577d93e',done);
     });
 
     it.skip('退出群',function(done){

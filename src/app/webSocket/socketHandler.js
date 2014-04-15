@@ -3,7 +3,10 @@ var smessageService = require('../service/SMessageService.js'),
 	webSocketService = require('./socketSender'),
 	express = require('../express'),
 	cookie = require('../../../node_modules/express/node_modules/cookie'),
-	utils = require('../../../node_modules/express/node_modules/connect/lib/utils');
+	utils = require('../../../node_modules/express/node_modules/connect/lib/utils'),
+	log4js = require('log4js');
+
+var logger = log4js.getLogger();
 
 exports.authorizationHandler = function(handshakeData, callback) {
 	if (handshakeData.headers.cookie) {
@@ -48,10 +51,9 @@ exports.groupChatHandler = function(socket, data, cb) {
 				content : data.content
 			}
 
-			if(!validMessage(message,cb)) return;
-
 			gmessageService.send(message,function(err){
 				if(err){
+					logger.error(err);
 					cb && cb({code : 10001,msg : 'save message error'});
 					return;
 				}
@@ -84,10 +86,9 @@ exports.whisperHandler = function(socket, data, cb) {
 		content : data.content
 	}
 
-	if(!validMessage(message,cb)) return;
-
 	smessageService.send(message, function (err) {
 		if (err) {
+			logger.error(err);
 			cb && cb({code: 10001, msg: 'save message error'});
 			return;
 		}
@@ -97,26 +98,3 @@ exports.whisperHandler = function(socket, data, cb) {
 
 }
 
-function validMessage(msg,cb){
-	if(!msg.from){
-		cb && cb({code : 10001,msg : 'have no from'});
-		return false;
-	}
-
-	if(!msg.to){
-		cb && cb({code : 10001,msg : 'have no to'});
-		return false;
-	}
-
-	if(!msg.orgId){
-		cb && cb({code : 10001,msg : 'have no orgId'});
-		return false;
-	}
-
-	if(!msg.content){
-		cb && cb({code : 10001,msg : 'have no content'});
-		return false;
-	}
-
-	return true;
-}
