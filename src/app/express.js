@@ -25,6 +25,7 @@ app.stack.unshift({ route: '', handle: function(req,res,next){
 	d.on('error', function (err) {
 		logger.error(err);
 		res.statusCode = 500;
+		res.json({code : 10001,msg : 'server error'});
 //		d.dispose();
 	});
 
@@ -38,6 +39,7 @@ app.stack.unshift({ route: '', handle: function(req,res,next){
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname + '../../../', 'views'));
 app.set('view engine', 'jade');
+app.use(express.static(path.join(__dirname + '../../../', 'public')));
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -55,7 +57,6 @@ app.use('/api',function(req,res,next){
 });
 
 app.use(app.router);
-app.use(express.static(path.join(__dirname + '../../../', 'public')));
 
 // development only
 if ('development' == app.get('env')) {

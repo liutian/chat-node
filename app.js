@@ -16,12 +16,24 @@ require('./src/app/schema');
 var http = require('http'),
 	express = require('./src/app/express'),
 	log4js = require('log4js'),
+	domain = require('domain'),
 	socketIO = require('./src/app/socket.io');
 
 var logger = log4js.getLogger();
 
-var server = http.createServer(express);
-server.listen(express.get('port'), function(){
-	logger.info('Express server start running ');
+
+var d = domain.create();
+//监听domain的错误事件
+d.on('error', function (err) {
+	logger.error(err);
+//		d.dispose();
 });
-socketIO(server);
+
+d.run(function(){
+	var server = http.createServer(express);
+	server.listen(express.get('port'), function(){
+		logger.info('Express server start running ');
+	});
+	socketIO(server);
+});
+
