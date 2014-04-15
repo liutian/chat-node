@@ -50,7 +50,7 @@ module.controller('ctrl', function ($scope, $http) {
 		socket = io.connect('http://localhost:3000');
 
 		socket.on('whisper',function(data){
-			alert('whisper:' + JSON.stringify(data));
+			alert('whisper data:' + JSON.stringify(data));
 		});
 
 		socket.on('broadcast',function(data){
@@ -64,7 +64,7 @@ module.controller('ctrl', function ($scope, $http) {
 
 	$scope.whisper = function(){
 		if(socket){
-			socket.emit('whisper',{toUserId : $scope.toUserId,content : '你好'});
+			socket.emit('whisper',{to : $scope.toUserId,content : '你好'});
 		}
 	}
 
@@ -76,19 +76,19 @@ module.controller('ctrl', function ($scope, $http) {
 
 	$scope.joinRoom = function(){
 		if(socket){
-			socket.emit('groupChat',{type : 'join',groupId : $scope.joinRoomName});
+			socket.emit('groupChat',{type : 'join',to : $scope.joinRoomName});
 		}
 	}
 
 	$scope.leaveRoom = function(){
 		if(socket){
-			socket.emit('groupChat',{type : 'leave',groupId : $scope.leaveRoomName});
+			socket.emit('groupChat',{type : 'leave',to : $scope.leaveRoomName});
 		}
 	}
 
 	$scope.roomSend = function(){
 		if(socket){
-			socket.emit('groupChat',{type : 'message',groupId : $scope.roomName,content : $scope.roomContent});
+			socket.emit('groupChat',{type : 'message',to : $scope.roomName,content : $scope.roomContent});
 		}
 	}
 });

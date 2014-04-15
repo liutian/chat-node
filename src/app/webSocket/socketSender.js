@@ -1,10 +1,18 @@
-exports.whisper = function(userId,data){
+exports.whisper = function(userId,data,cb){
 	var _sockets = global.appData.socketIO.sockets[userId];
 	var io = global.appData.socketIO.io;
+	var bool = false;
 
 	exports.iteratorSockets(_sockets,function(socketId){
+		bool = true;
 		io.sockets.sockets[socketId].emit('whisper',data);
 	});
+
+	if(bool){
+		cb && cb({code : 10000});
+	}else{
+		cb && cb({code : 10000,msg : 'current socket have problems ,can not send whisper outside'});
+	}
 }
 
 exports.groupChat = function(groupId,selfUserId,data,cb){
@@ -35,6 +43,9 @@ exports.groupChat = function(groupId,selfUserId,data,cb){
 
 	if(bool){
 		io.sockets.emit('groupChat',data);
+		cb && cb({code : 10000});
+	}else{
+		cb && cb({code : 10000,msg : 'current socket have problems ,can not send groupChat outside'});
 	}
 }
 
