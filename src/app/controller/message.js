@@ -1,8 +1,11 @@
 var gmessageService = require('../service/GMessageService'),
 	smessageService = require('../service/SMessageService'),
-	log4js = require('log4js');
+	log4js = require('log4js'),
+	JPush = require('jpush-sdk');
 
 var logger = log4js.getLogger();
+var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: global.prop.jpush.masterSecret});
+
 
 module.exports = function(app){
 	app.put('/api/gmessage',function(req,res){
@@ -20,6 +23,11 @@ module.exports = function(app){
 				return;
 			}
 
+			jpushClient.sendNotificationWithTag(global.prop.jpush.groupChatSendNo,gmessage.to,'群聊',gmessage.content,function(err,body){
+				if(err){
+					logger.error(err);
+				}
+			});
 			res.json({code : 10000});
 		});
 	});
@@ -39,6 +47,11 @@ module.exports = function(app){
 				return;
 			}
 
+			jpushClient.sendNotificationWithAlias(global.prop.jpush.whisperSendNo,smessage.to,'私聊',smessage.content,function(err,body){
+				if(err){
+					logger.error(err);
+				}
+			});
 			res.json({code : 10000});
 		});
 	});

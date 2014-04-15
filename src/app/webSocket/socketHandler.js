@@ -4,9 +4,11 @@ var smessageService = require('../service/SMessageService.js'),
 	express = require('../express'),
 	cookie = require('../../../node_modules/express/node_modules/cookie'),
 	utils = require('../../../node_modules/express/node_modules/connect/lib/utils'),
-	log4js = require('log4js');
+	log4js = require('log4js'),
+	JPush = require('jpush-sdk');
 
 var logger = log4js.getLogger();
+var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: global.prop.jpush.masterSecret});
 
 exports.authorizationHandler = function(handshakeData, callback) {
 	if (handshakeData.headers.cookie) {
@@ -59,6 +61,11 @@ exports.groupChatHandler = function(socket, data, cb) {
 				}
 
 				webSocketService.groupChat(data.to, socket.$$userId, data, cb);
+				jpushClient.sendNotificationWithTag(global.prop.jpush.groupChatSendNo,message.to,'群聊',message.content,function(err,body){
+					if(err){
+						logger.error(err);
+					}
+				});
 			});
 		} else {
 			var _sockets = global.appData.socketIO.sockets[socket.$$userId];
@@ -94,6 +101,11 @@ exports.whisperHandler = function(socket, data, cb) {
 		}
 
 		webSocketService.whisper(data.to, data,cb);
+		jpushClient.sendNotificationWithAlias(global.prop.jpush.whisperSendNo,message.to,'私聊',message.content,function(err,body){
+			if(err){
+				logger.error(err);
+			}
+		});
 	});
 
 }
