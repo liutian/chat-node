@@ -50,7 +50,8 @@ app.use(express.session({ key : 'sid',store: sessionStore }));
 
 app.use('/api',function(req,res,next){
 	if(!req.session.user){
-		res.json({code : 401,msg : 'Unauthorized'});
+		res.statusCode = 302;
+		res.json({code : 9999,msg : 'Unauthorized'});
 	}else{
 		next();
 	}
