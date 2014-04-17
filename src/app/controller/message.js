@@ -10,7 +10,7 @@ var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: g
 module.exports = function(app){
 	app.put('/api/gmessage',function(req,res){
 		var gmessage = {
-			to : req.body.to,
+			to : req.body.toTeamId,
 			from : req.session.user.id,
 			orgId : req.session.user.orgId,
 			content : req.body.content
@@ -34,7 +34,7 @@ module.exports = function(app){
 
 	app.put('/api/smessage',function(req,res){
 		var smessage = {
-			to : req.body.to,
+			to : req.body.toUserId,
 			from : req.session.user.id,
 			orgId : req.session.user.orgId,
 			content : req.body.content
