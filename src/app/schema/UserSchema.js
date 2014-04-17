@@ -2,6 +2,7 @@ var mongoose = require('mongoose')
   , Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
+	refId : {type : Number,required : true},
     loginName : {type : String,required : true},
     nickName : String,
     pwd : {type : String,required : true},
