@@ -64,7 +64,7 @@ module.controller('ctrl', function ($scope, $http) {
 
 	$scope.whisper = function(){
 		if(socket){
-			socket.emit('whisper',{toUserId : $scope.toUserId,content : '你好'});
+			socket.emit('whisper',{to : $scope.toUserId,content : '你好'});
 		}
 	}
 
@@ -76,7 +76,7 @@ module.controller('ctrl', function ($scope, $http) {
 
 	$scope.joinRoom = function(){
 		if(socket){
-			socket.emit('groupChat',{type : 'join',toTeamId : $scope.joinRoomName});
+			socket.emit('groupChat',{type : 'join',to : $scope.joinRoomName});
 		}
 	}
 
