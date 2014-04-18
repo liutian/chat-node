@@ -34,6 +34,10 @@ function _send (err,user,cb){
 
 exports.findNewMessage = function (userId, orgId, cb) {
     SMessage.find({to: userId, orgId: orgId, read: 'n'})
+	    .populate({
+		    path : 'to from',
+		    select : 'nickName profilePhoto sex letterName'
+	    })
         .sort('-createDate').exec(function (err, messages) {
             if (err) {
                 cb(err);
@@ -63,7 +67,12 @@ exports.findNewMessage = function (userId, orgId, cb) {
 };
 
 exports.findUnreadMessages = function (from, to, orgId, cb) {
-    SMessage.find({from: from, to: to, orgId: orgId, read: 'n'}).sort('createDate')
+    SMessage.find({from: from, to: to, orgId: orgId, read: 'n'})
+	    .populate({
+		    path : 'to from',
+		    select : 'nickName profilePhoto sex letterName'
+	    })
+	    .sort('createDate')
         .exec(function (err, messages) {
             if(err){
 	            cb(err,null);

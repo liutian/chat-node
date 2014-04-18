@@ -46,36 +46,45 @@ function _send(err, group, cb) {
 }
 //进入群列表时查询每个群中自己未读的消息总数，以及每个群的最后一条消息
 exports.findNewMessage = function (userId, orgId, cb) {
-	GMessage.find({orgId: orgId, unread: {$all: [userId]}}, '-unread').sort('-createDate').exec(function (err, messages) {
-		if (err) {
-			cb(err);
-			return;
-		} else if (!messages || messages.length == 0) {
-			cb(null, []);
-			return;
-		}
-
-		var _newMessages = {};
-		var newMessage = [];
-		for (var i = 0; i < messages.length; i++) {
-			var message = messages[i];
-			if (!_newMessages.hasOwnProperty(message.to)) {
-				var newMsg = message.toJSON();
-				newMsg.unreadCount = 1;
-				_newMessages[newMsg.to] = newMsg;
-			} else {
-				_newMessages[newMsg.to].unreadCount++;
+	GMessage.find({orgId: orgId, unread: {$all: [userId]}}, '-unread')
+		.populate({
+			path : 'to from',
+			select : 'nickName profilePhoto sex letterName'
+		})
+		.sort('-createDate').exec(function (err, messages) {
+			if (err) {
+				cb(err);
+				return;
+			} else if (!messages || messages.length == 0) {
+				cb(null, []);
+				return;
 			}
-		}
-		_.forEach(_newMessages, function (val) {
-			newMessage.push(val);
-		});
-		cb(null, newMessage);
+
+			var _newMessages = {};
+			var newMessage = [];
+			for (var i = 0; i < messages.length; i++) {
+				var message = messages[i];
+				if (!_newMessages.hasOwnProperty(message.to)) {
+					var newMsg = message.toJSON();
+					newMsg.unreadCount = 1;
+					_newMessages[newMsg.to] = newMsg;
+				} else {
+					_newMessages[newMsg.to].unreadCount++;
+				}
+			}
+			_.forEach(_newMessages, function (val) {
+				newMessage.push(val);
+			});
+			cb(null, newMessage);
 	});
 }
 //获取指定群的未读消息，有则再进行相应更新操作
 exports.findUnreadMessages = function (userId, groupId, orgId, cb) {
 	GMessage.find({to: groupId, unread: {$all: userId}, orgId: orgId}, '-unread')
+		.populate({
+			path : 'to from',
+			select : 'nickName profilePhoto sex letterName'
+		})
 		.sort('createDate').exec(function (err, messages) {
 			if(err){
 				cb(err,null);
