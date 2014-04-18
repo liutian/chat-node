@@ -65,10 +65,16 @@ exports.findNewMessage = function (userId, orgId, cb) {
 exports.findUnreadMessages = function (from, to, orgId, cb) {
     SMessage.find({from: from, to: to, orgId: orgId, read: 'n'}).sort('createDate')
         .exec(function (err, messages) {
-            SMessage.update({from: from, to: to, orgId: orgId, read: 'n'}
-                , {$set: {read: 'y'}},{multi: true},function(){
-                cb(err, messages);
-            });
+            if(err){
+	            cb(err,null);
+            }else if(messages && messages.length > 0){
+			    SMessage.update({from: from, to: to, orgId: orgId, read: 'n'}
+	                , {$set: {read: 'y'}},{multi: true},function(){
+	                cb(err, messages);
+	            });
+            }else{
+	           cb(err,messages);
+            }
         });
 }
 

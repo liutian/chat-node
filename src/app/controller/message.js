@@ -55,4 +55,60 @@ module.exports = function(app){
 			res.json({code : 10000});
 		});
 	});
+
+	app.get('/api/findNewGMessage',function(req,res){
+		var currUser = req.session.user;
+		gmessageService.findNewMessage(currUser.id,currUser.orgId,function(err,gmessages){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+				return;
+			}
+
+			res.json(gmessages);
+		});
+	});
+
+
+	app.get('/api/findNewSMessage',function(req,res){
+		var currUser = req.session.user;
+		smessageService.findNewMessage(currUser.id,currUser.orgId,function(err,gmessages){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+				return;
+			}
+
+			res.json(gmessages);
+		});
+	});
+
+
+	app.get('/api/findUnreadGMessages/:groupId',function(req,res){
+		var currUser = req.session.user;
+		gmessageService.findUnreadMessages(currUser.id,req.params.groupId,currUser.orgId,function(err,gmessages){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+				return;
+			}
+
+			res.json(gmessages);
+		});
+	});
+
+
+	app.get('/api/findUnreadSMessages/:userId',function(req,res){
+		var currUser = req.session.user;
+		smessageService.findUnreadMessages(req.params.userId,currUser.id,currUser.orgId,function(err,gmessages){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+				return;
+			}
+
+			res.json(gmessages);
+		});
+	});
+
 }

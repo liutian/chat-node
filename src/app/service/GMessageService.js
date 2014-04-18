@@ -79,7 +79,6 @@ exports.findUnreadMessages = function (userId, groupId, orgId, cb) {
 		.sort('createDate').exec(function (err, messages) {
 			if(err){
 				cb(err,null);
-				return;
 			}else if(messages && messages.length > 0){
 				GMessage.update({to: groupId, unread: {$all: userId}, orgId: orgId}
 					, {$pull: {unread: userId}}, {multi: true}, function () {
