@@ -36,7 +36,7 @@ exports.findNewMessage = function (userId, orgId, cb) {
     SMessage.find({to: userId, orgId: orgId, read: 'n'})
 	    .populate({
 		    path : 'to from',
-		    select : 'nickName profilePhoto sex letterName'
+		    select : 'refId nickName profilePhoto sex letterName'
 	    })
         .sort('-createDate').exec(function (err, messages) {
             if (err) {
@@ -70,7 +70,7 @@ exports.findUnreadMessages = function (from, to, orgId, cb) {
     SMessage.find({from: from, to: to, orgId: orgId, read: 'n'})
 	    .populate({
 		    path : 'to from',
-		    select : 'nickName profilePhoto sex letterName'
+		    select : 'refId nickName profilePhoto sex letterName'
 	    })
 	    .sort('createDate')
         .exec(function (err, messages) {

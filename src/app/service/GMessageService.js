@@ -49,7 +49,7 @@ exports.findNewMessage = function (userId, orgId, cb) {
 	GMessage.find({orgId: orgId, unread: {$all: [userId]}}, '-unread')
 		.populate({
 			path : 'to from',
-			select : 'nickName profilePhoto sex letterName'
+			select : 'refId nickName profilePhoto sex letterName'
 		})
 		.sort('-createDate').exec(function (err, messages) {
 			if (err) {
@@ -83,7 +83,7 @@ exports.findUnreadMessages = function (userId, groupId, orgId, cb) {
 	GMessage.find({to: groupId, unread: {$all: userId}, orgId: orgId}, '-unread')
 		.populate({
 			path : 'to from',
-			select : 'nickName profilePhoto sex letterName'
+			select : 'refId nickName profilePhoto sex letterName'
 		})
 		.sort('createDate').exec(function (err, messages) {
 			if(err){
