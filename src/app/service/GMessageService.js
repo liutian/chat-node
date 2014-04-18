@@ -44,7 +44,7 @@ function _send(err, group, cb) {
 		mSMessage.save(cb);
 	}
 }
-
+//进入群列表时查询每个群中自己未读的消息总数，以及每个群的最后一条消息
 exports.findNewMessage = function (userId, orgId, cb) {
 	GMessage.find({orgId: orgId, unread: {$all: [userId]}}, '-unread').sort('-createDate').exec(function (err, messages) {
 		if (err) {
@@ -73,14 +73,21 @@ exports.findNewMessage = function (userId, orgId, cb) {
 		cb(null, newMessage);
 	});
 }
-
+//获取指定群的未读消息，有则再进行相应更新操作
 exports.findUnreadMessages = function (userId, groupId, orgId, cb) {
 	GMessage.find({to: groupId, unread: {$all: userId}, orgId: orgId}, '-unread')
 		.sort('createDate').exec(function (err, messages) {
-			GMessage.update({to: groupId, unread: {$all: userId}, orgId: orgId}
-				, {$pull: {unread: userId}}, {multi: true}, function () {
-					cb(err, messages);
-				});
+			if(err){
+				cb(err,null);
+				return;
+			}else if(messages && messages.length > 0){
+				GMessage.update({to: groupId, unread: {$all: userId}, orgId: orgId}
+					, {$pull: {unread: userId}}, {multi: true}, function () {
+						cb(err, messages);
+					});
+			}else{
+				cb(err,messages);
+			}
 		});
 }
 
@@ -94,7 +101,7 @@ function validateGMessage(gmessage, cb) {
 		return false;
 	}
 	if (!gmessage.to && !gmessage.refId) {
-		cb(new BaseError('gmessage need to'));
+		cb(new BaseError('gmessage need to or refId'));
 		return false;
 	}
 	if (!gmessage.orgId) {
