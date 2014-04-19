@@ -49,16 +49,18 @@ exports.signUp = function (user, cb) {
  * }
  * @param cb
  */
-exports.loginIn = function (user, cb) {
-    if (!userValid(user,cb)) {
-        return;
-    }
+exports.signIn = function (user, cb) {
+    if (!userValid(user,cb)) return;
 
     User.findOne({loginName: user.loginName}, function (err, data) {
-        if (err || !data) {
+        if(err){
+	        cb(err);
+	        return;
+        }else if(!data){
 	        cb(new BaseError('loginName invalid'));
 	        return;
         }
+
         var md5 = crypto.createHash('md5');
         md5.update(user.pwd);
         var pwdMd5 = md5.digest('hex');

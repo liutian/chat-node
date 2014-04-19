@@ -18,7 +18,7 @@ describe('用户相关的接口', function () {
     });
 
     it.skip('用户登录验证', function (done) {
-        userService.loginIn({
+        userService.signIn({
             loginName : '1191577401@qq.com',
             pwd : '123456'
         }, function (err) {
