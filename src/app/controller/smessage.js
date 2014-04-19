@@ -12,7 +12,10 @@ module.exports = function(app){
 			refId : req.body.toUserId,
 			from : req.session.user.id,
 			orgId : req.session.user.orgId,
-			content : req.body.content
+			content : req.body.content,
+			type : req.body.type,
+			filePath : req.body.filePath,
+			fileName : req.body.fileName
 		}
 
 		smessageService.send(smessage,function(err){
@@ -22,12 +25,13 @@ module.exports = function(app){
 				return;
 			}
 
+			smessage.from = {refId : req.session.user.refId};
+			res.json(convertMessage(smessage));
 			jpushClient.sendNotificationWithAlias(global.prop.jpush.whisperSendNo,smessage.to,'私聊',smessage.content,function(err,body){
 				if(err){
 					logger.error(err);
 				}
 			});
-			res.json({code : 10000});
 		});
 	});
 
@@ -56,5 +60,13 @@ module.exports = function(app){
 			res.json(gmessages);
 		});
 	});
+}
 
+function convertMessage(message){
+	message.fromUserId = message.from.refId;
+//	message.fromUserName = message.from.nickName;
+	message.filePathUri = message.filePath[0];
+	message.filePathMidUri = message.filePath[1];
+//	message.userImgUrl = message.from.profilePhoto;
+	return message;
 }
