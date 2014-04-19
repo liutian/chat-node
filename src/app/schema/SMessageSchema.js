@@ -11,7 +11,10 @@ var SMessageSchema = new Schema({
     from: {type: Schema.Types.ObjectId, ref: 'user',required : true},
     to: {type: Schema.Types.ObjectId, ref: 'user',required : true},
     createDate : {type : Date,default : Date.now},
-    orgId : {type : Number,required : true}
+    orgId : {type : Number,required : true},
+	type : {type : Number,enum : [0,1,2],default : 0},
+	filePath : [String],
+	fileName : String
 });
 
 mongoose.model('smessage', SMessageSchema);
