@@ -11,24 +11,35 @@ exports.send = function (smessage, cb) {
 
 	if(smessage.to){
 		User.findById(smessage.to,function(err,user){
-	        _send(err,user,cb);
+	        _send(err,user,smessage,cb);
 		});
 	}else{
 		User.find({refId : smessage.refId},function(err,user){
-			_send(err,user,cb);
+			_send(err,user,smessage,cb);
 		});
     }
 }
 
-function _send (err,user,cb){
+function _send (err,user,smessage,cb){
 	if(err){
 		cb(err);
 	}else if(!user){
-		cb(new BaseError('message to:%s not exists ', smessage.to));
+		cb(new BaseError('user:%s not exists ', smessage.to || smessage.refId));
 	}else{
+		smessage.contentText = smessage.content;
+
+		if(smessage.type == 1){
+			smessage.content = '<a href="'+ smessage.filePath[0] +'"><img src="'+ smessage.filePath[1] +'"></a>';
+			smessage.contentText = '[图片]' + smessage.fileName;
+		}else if(smessage.type = 2){
+			smessage.content = '<a href="'+ smessage.filePath[0] +'">'+ smessage.fileName +'</a>';
+			smessage.contentText = '[文件]' + smessage.fileName;
+		}
+
 		var mSMessage = new SMessage(smessage);
-		mSMessage.contentText = mSMessage.content;
-		mSMessage.save(cb);
+		mSMessage.save(function(err){
+			cb(err,mSMessage);
+		});
 	}
 }
 
@@ -88,7 +99,8 @@ exports.findUnreadMessages = function (from, to, orgId, cb) {
 }
 
 function validateSMessage(smessage, cb) {
-    if (!smessage.content || smessage.content.length == 0) {
+    if (smessage.type != 1 && smessage.type != 2
+	    && (!smessage.content || smessage.content.length == 0)) {
         cb(new BaseError('smessage need content '));
         return false;
     }
