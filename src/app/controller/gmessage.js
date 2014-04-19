@@ -23,6 +23,19 @@ module.exports = function(app){
 		});
 	});
 
+	app.get('/api/gmessage/:id',function(req,res){
+		var currUser = req.session.user;
+		gmessageService.getMessage(req.params.id,currUser.id,function(err,message){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+				return;
+			}
+
+			res.json(message);
+		});
+	});
+
 	app.get('/api/findNewGMessage',function(req,res){
 		var currUser = req.session.user;
 		gmessageService.findNewMessage(currUser.id,currUser.orgId,function(err,gmessages){

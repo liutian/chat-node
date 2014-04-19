@@ -26,44 +26,30 @@ exports.send = function (gmessage, cb) {
 			_send(err, group,gmessage, cb);
 		});
 	}
-
 }
 
-function _send(err, group,gmessage, cb) {
-	if (err) {
-		cb(err);
-	} else if (!group) {
-		cb(new BaseError('this group not exists id:%s', gmessage.to || gmessage.refId));
-	} else {
-		gmessage.to = group.id;
-		gmessage.contentText = gmessage.content;
-
-		if(gmessage.type == 1){
-			gmessage.content = '<a href="'+ gmessage.filePath[0] +'"><img src="'+ gmessage.filePath[1] +'"></a>';
-			gmessage.contentText = '[图片]' + gmessage.fileName;
-		}else if(gmessage.type = 2){
-			gmessage.content = '<a href="'+ gmessage.filePath[0] +'">'+ gmessage.fileName +'</a>';
-			gmessage.contentText = '[文件]' + gmessage.fileName;
-		}
-
-		var mGMessage = new GMessage(gmessage);
-		var isMember = false;
-		for (var i = 0; i < group.members.length; i++) {
-			if (group.members[i] == gmessage.from) {
-				isMember = true;
-			} else {
-				mGMessage.unread.push(group.members[i]);
-			}
-		}
-		if (!isMember) {
-			cb(new BaseError('You are not members of the group , userId:%s groupId:%s', gmessage.from, gmessage.to || gmessage.refId));
+exports.getMessage = function(id,currUserId,cb){
+	GMessage.findById(id,function(err,message){
+		if(err){
+			cb(err);
 			return;
 		}
-		mGMessage.save(function(err){
-			cb(err,mGMessage,group);
-		});
-	}
+
+		Group.find({id : message.to,members : currUserId},function(err,group){
+			if(err){
+				cb(err);
+				return;
+			}
+
+			if(!group){
+				cb(new BaseError('have no right'));
+			}else{
+				cb(null,message);
+			}
+		})
+	});
 }
+
 //进入群列表时查询每个群中自己未读的消息总数，以及每个群的最后一条消息
 exports.findNewMessage = function (userId, orgId, cb) {
 	GMessage.find({orgId: orgId, unread: {$all: [userId]}}, '-unread')
@@ -118,6 +104,43 @@ exports.findUnreadMessages = function (userId, groupId, orgId, cb) {
 			}
 		});
 }
+
+function _send(err, group,gmessage, cb) {
+	if (err) {
+		cb(err);
+	} else if (!group) {
+		cb(new BaseError('this group not exists id:%s', gmessage.to || gmessage.refId));
+	} else {
+		gmessage.to = group.id;
+		gmessage.contentText = gmessage.content;
+
+		if(gmessage.type == 1){
+			gmessage.content = '<a href="'+ gmessage.filePath[0] +'"><img src="'+ gmessage.filePath[1] +'"></a>';
+			gmessage.contentText = '[图片]' + gmessage.fileName;
+		}else if(gmessage.type = 2){
+			gmessage.content = '<a href="'+ gmessage.filePath[0] +'">'+ gmessage.fileName +'</a>';
+			gmessage.contentText = '[文件]' + gmessage.fileName;
+		}
+
+		var mGMessage = new GMessage(gmessage);
+		var isMember = false;
+		for (var i = 0; i < group.members.length; i++) {
+			if (group.members[i] == gmessage.from) {
+				isMember = true;
+			} else {
+				mGMessage.unread.push(group.members[i]);
+			}
+		}
+		if (!isMember) {
+			cb(new BaseError('You are not members of the group , userId:%s groupId:%s', gmessage.from, gmessage.to || gmessage.refId));
+			return;
+		}
+		mGMessage.save(function(err){
+			cb(err,mGMessage,group);
+		});
+	}
+}
+
 
 function validateGMessage(gmessage, cb) {
 	if (gmessage.type != 1 && gmessage.type != 2
