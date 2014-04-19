@@ -21,9 +21,7 @@ exports.send = function (smessage, cb) {
 }
 
 exports.getMessage = function(id,cb){
-	SMessage.findById(id,function(err,message){
-		cb(err,message);
-	});
+	SMessage.findById(id,cb);
 }
 
 exports.findNewMessage = function (userId, orgId, cb) {

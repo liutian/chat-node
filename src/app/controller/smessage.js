@@ -24,7 +24,7 @@ module.exports = function(app){
 		});
 	});
 
-	app.get('/api/getMessage/:id',function(req,res){
+	app.get('/api/smessage/:id',function(req,res){
 		smessageService.getMessage(req.params.id,function(err,message){
 			if(err){
 				logger.error(err);
