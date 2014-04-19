@@ -17,6 +17,7 @@ var User = mongoose.model('user');
  *  nickName : String,
  *  profilePhoto : String,
  *  sex : String
+ *  refId : Number
  * }
  * @param cb
  */
@@ -45,7 +46,6 @@ exports.signUp = function (user, cb) {
  * {
  *  orgId : Number,
  *  loginName : String,
- *  pwd : String
  * }
  * @param cb
  */

@@ -30,6 +30,17 @@ module.exports = function(app){
 		});
 	});
 
+	app.post('/api/editUser',function(req,res){
+		userService.editUser(req.body,function(err){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+			}else{
+				res.json({code : 10000});
+			}
+		});
+	});
+
 	app.get('/api/user',function(req,res){
 		res.json([{name : 'sd',age : 1},{name : 'ffd',age : 34}]);
 	});
