@@ -3,6 +3,7 @@ var mongoose = require('mongoose')
 
 var GroupSchema = new Schema({
 	refId : {type : Number,required : true},
+	profilePhoto : {type : String,require : true},
     name : {type : String,required : true},
     letterName : {type : String,required: true,lowercase:true},
     founder : {type : Schema.Types.ObjectId,ref : 'user',require : true},

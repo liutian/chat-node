@@ -26,6 +26,7 @@ function _send (err,user,smessage,cb){
 	}else if(!user){
 		cb(new BaseError('user:%s not exists ', smessage.to || smessage.refId));
 	}else{
+		smessage.to = user.id;
 		smessage.contentText = smessage.content;
 
 		if(smessage.type == 1){

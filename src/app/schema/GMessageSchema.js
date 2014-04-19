@@ -10,7 +10,10 @@ var GMessageSchema = new Schema({
     from: {type: Schema.Types.ObjectId, ref: 'user'},
     to: {type: Schema.Types.ObjectId, ref: 'group'},
     createDate : {type : Date,default : Date.now},
-    orgId : {type : Number,required : true}
+    orgId : {type : Number,required : true},
+	type : {type : Number,enum : [0,1,2],default : 0},
+	filePath : [String],
+	fileName : String
 });
 
 mongoose.model('gmessage', GMessageSchema);

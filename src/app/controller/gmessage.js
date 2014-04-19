@@ -12,22 +12,14 @@ module.exports = function(app){
 			refId : req.body.toTeamId,
 			from : req.session.user.id,
 			orgId : req.session.user.orgId,
-			content : req.body.content
+			content : req.body.content,
+			type : req.body.type,
+			filePath : req.body.filePath,
+			fileName : req.body.fileName
 		}
 
-		gmessageService.send(gmessage,function(err){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-				return;
-			}
-
-			jpushClient.sendNotificationWithTag(global.prop.jpush.groupChatSendNo,gmessage.to,'群聊',gmessage.content,function(err,body){
-				if(err){
-					logger.error(err);
-				}
-			});
-			res.json({code : 10000});
+		gmessageService.send(gmessage,function(err,mGMessage,toGroup){
+			sendCallBack(err,mGMessage,toGroup,res,req);
 		});
 	});
 
@@ -56,4 +48,73 @@ module.exports = function(app){
 			res.json(gmessages);
 		});
 	});
+}
+
+function sendCallBack(err,mGMessage,toGroup,res,req){
+	if(err){
+		logger.error(err);
+		res.json({code : 10001,msg : err.message});
+		return;
+	}
+
+	mGMessage.from = {
+		refId : req.session.user.refId,
+		nickName : req.session.user.nickName,
+		profilePhoto : req.session.user.profilePhoto
+	};
+	res.json(convertMessage(mGMessage));
+
+	mobilePush(mGMessage,toGroup);
+}
+
+function mobilePush(mGMessage,toGroup){
+	var content = mGMessage.contentText,extra = {};
+
+	if(mGMessage.type == 1){
+		content = '[图片]';
+		extra.path = mGMessage.filePath[1];
+	}else if(mGMessage.type == 2){
+		content = '[文件]';
+		if(mGMessage.fileName.length > 20){
+			var suffix = mGMessage.fileName.lastIndexOf('.' + 1);
+			extra.fn = mGMessage.fileName.substr(0,20 - suffix.length - 1) + '.' + suffix;
+		}else{
+			extra.fn = mGMessage.fileName;
+		}
+		extra.path = mGMessage.filePath[0];
+	}else if (content.length > 50){
+		content = content.substr(0,50);
+		extra.id = mGMessage.id;
+	}
+
+	extra.ct = mGMessage.type;
+	extra.uid = mGMessage.from.refId;
+	extra.ios = {sound : 'default'};
+
+	for(var i = 0;i < toGroup.members.length;i++){
+		var member = toGroup.members[i];
+		if(member.refId == mGMessage.from.refId) continue;
+
+		var sendNo = global.prop.jpush.groupChatSendNo;
+		jpushClient.sendNotificationWithAlias(sendNo,member.loginName,mGMessage.from.nickName,content,1,extra,function(err,body){
+			if(err){
+				logger.error(err);
+			}
+		});
+	}
+}
+
+function convertMessage(message){
+	message.fromUserId = message.from.refId;
+	message.fromUserName = message.from.nickName;
+	message.fromUserPhoto = message.from.profilePhoto;
+	if(message.type == 1){
+		message.filePathUri = message.filePath[0];
+		message.filePathMidUri = message.filePath[1];
+	}else if(message.type == 2){
+		message.filePathUri = message.filePath[0];
+	}
+	message.createDateFmt = moment(message.createDate).format('YYYY-MM-dd HH:mm:ss');
+
+	return message;
 }

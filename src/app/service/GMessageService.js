@@ -10,38 +10,58 @@ exports.send = function (gmessage, cb) {
 	if (!validateGMessage(gmessage, cb)) return;
 
 	if (gmessage.to) {
-		Group.findById(gmessage.to, function (err, group) {
-			_send(err, group, cb);
+		Group.findById(gmessage.to)
+			.populate({
+				path : 'members',
+				select : 'refId loginName nickName'
+			}).exec( function (err, group) {
+			_send(err, group,gmessage, cb);
 		});
 	} else {
-		Group.find({refId: gmessage.refId, orgId: gmessage.orgId}, function (err, group) {
-			_send(err, group, cb);
+		Group.find({refId: gmessage.refId, orgId: gmessage.orgId})
+			.populate({
+				path : 'members',
+				select : 'refId loginName nickName'
+			}).exec( function (err, group) {
+			_send(err, group,gmessage, cb);
 		});
 	}
 
 }
 
-function _send(err, group, cb) {
+function _send(err, group,gmessage, cb) {
 	if (err) {
 		cb(err);
 	} else if (!group) {
-		cb(new BaseError('this group not exists groupId:%s', gmessage.to));
+		cb(new BaseError('this group not exists id:%s', gmessage.to || gmessage.refId));
 	} else {
-		var mSMessage = new GMessage(gmessage);
+		gmessage.to = group.id;
+		gmessage.contentText = gmessage.content;
+
+		if(gmessage.type == 1){
+			gmessage.content = '<a href="'+ gmessage.filePath[0] +'"><img src="'+ gmessage.filePath[1] +'"></a>';
+			gmessage.contentText = '[图片]' + gmessage.fileName;
+		}else if(gmessage.type = 2){
+			gmessage.content = '<a href="'+ gmessage.filePath[0] +'">'+ gmessage.fileName +'</a>';
+			gmessage.contentText = '[文件]' + gmessage.fileName;
+		}
+
+		var mGMessage = new GMessage(gmessage);
 		var isMember = false;
 		for (var i = 0; i < group.members.length; i++) {
 			if (group.members[i] == gmessage.from) {
 				isMember = true;
 			} else {
-				mSMessage.unread.push(group.members[i]);
+				mGMessage.unread.push(group.members[i]);
 			}
 		}
 		if (!isMember) {
-			cb(new BaseError('You are not members of the group , userId:%s groupId:%s', gmessage.from, gmessage.to));
+			cb(new BaseError('You are not members of the group , userId:%s groupId:%s', gmessage.from, gmessage.to || gmessage.refId));
 			return;
 		}
-		mSMessage.contentText = mSMessage.content;
-		mSMessage.save(cb);
+		mGMessage.save(function(err){
+			cb(err,mGMessage,group);
+		});
 	}
 }
 //进入群列表时查询每个群中自己未读的消息总数，以及每个群的最后一条消息
@@ -100,7 +120,8 @@ exports.findUnreadMessages = function (userId, groupId, orgId, cb) {
 }
 
 function validateGMessage(gmessage, cb) {
-	if (!gmessage.content || gmessage.content.length == 0) {
+	if (gmessage.type != 1 && gmessage.type != 2
+		&& (!gmessage.content || gmessage.content.length == 0)) {
 		cb(new BaseError('gmessage need content'));
 		return false;
 	}
