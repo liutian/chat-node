@@ -20,7 +20,7 @@ module.exports = function(app){
 		}
 
 		smessageService.send(smessage,function(err,mSMessage,toUser){
-			sendCallBack(err,mSMessage,toUser,res);
+			sendCallBack(err,mSMessage,toUser,res,req);
 		});
 	});
 
@@ -51,7 +51,7 @@ module.exports = function(app){
 	});
 }
 
-function sendCallBack(err,mSMessage,toUser,res){
+function sendCallBack(err,mSMessage,toUser,res,req){
 	if(err){
 		logger.error(err);
 		res.json({code : 10001,msg : err.message});
@@ -97,7 +97,8 @@ function mobilePush(mSMessage){
 	extra.uid = mSMessage.from.refId;
 	extra.ios = {sound : 'default'};
 
-	jpushClient.sendNotificationWithAlias(global.prop.jpush.whisperSendNo,mSMessage.to.loginName,mSMessage.from.nickName,content,1,extra,function(err,body){
+	var sendNo = global.prop.jpush.whisperSendNo;
+	jpushClient.sendNotificationWithAlias(sendNo,mSMessage.to.loginName,mSMessage.from.nickName,content,1,extra,function(err,body){
 		if(err){
 			logger.error(err);
 		}
