@@ -38,7 +38,7 @@ function _send (err,user,smessage,cb){
 
 		var mSMessage = new SMessage(smessage);
 		mSMessage.save(function(err){
-			cb(err,mSMessage);
+			cb(err,mSMessage,user);
 		});
 	}
 }
