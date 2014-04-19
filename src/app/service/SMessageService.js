@@ -20,28 +20,10 @@ exports.send = function (smessage, cb) {
     }
 }
 
-function _send (err,user,smessage,cb){
-	if(err){
-		cb(err);
-	}else if(!user){
-		cb(new BaseError('user:%s not exists ', smessage.to || smessage.refId));
-	}else{
-		smessage.to = user.id;
-		smessage.contentText = smessage.content;
-
-		if(smessage.type == 1){
-			smessage.content = '<a href="'+ smessage.filePath[0] +'"><img src="'+ smessage.filePath[1] +'"></a>';
-			smessage.contentText = '[图片]' + smessage.fileName;
-		}else if(smessage.type = 2){
-			smessage.content = '<a href="'+ smessage.filePath[0] +'">'+ smessage.fileName +'</a>';
-			smessage.contentText = '[文件]' + smessage.fileName;
-		}
-
-		var mSMessage = new SMessage(smessage);
-		mSMessage.save(function(err){
-			cb(err,mSMessage,user);
-		});
-	}
+exports.getMessage = function(id,cb){
+	SMessage.findById(id,function(err,message){
+		cb(err,message);
+	});
 }
 
 exports.findNewMessage = function (userId, orgId, cb) {
@@ -122,4 +104,28 @@ function validateSMessage(smessage, cb) {
         return false;
     }
     return true;
+}
+
+function _send (err,user,smessage,cb){
+	if(err){
+		cb(err);
+	}else if(!user){
+		cb(new BaseError('user:%s not exists ', smessage.to || smessage.refId));
+	}else{
+		smessage.to = user.id;
+		smessage.contentText = smessage.content;
+
+		if(smessage.type == 1){
+			smessage.content = '<a href="'+ smessage.filePath[0] +'"><img src="'+ smessage.filePath[1] +'"></a>';
+			smessage.contentText = '[图片]' + smessage.fileName;
+		}else if(smessage.type = 2){
+			smessage.content = '<a href="'+ smessage.filePath[0] +'">'+ smessage.fileName +'</a>';
+			smessage.contentText = '[文件]' + smessage.fileName;
+		}
+
+		var mSMessage = new SMessage(smessage);
+		mSMessage.save(function(err){
+			cb(err,mSMessage,user);
+		});
+	}
 }
