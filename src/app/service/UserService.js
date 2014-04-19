@@ -21,50 +21,25 @@ var User = mongoose.model('user');
  * @param cb
  */
 exports.signUp = function (user, cb) {
-    var mUser = new User(user);
+    if (!userValid(user, cb)) return;
 
-    if (!user.orgId) {
-        cb(new BaseError('need orgId'));
-        return false;
-    }
+	if (!user.orgId) {
+		cb(new BaseError('need orgId'));
+		return;
+	}
 
-    if (!userValid(user, cb)) {
-        return;
-    }
-
-    User.findOne({loginName: mUser.loginName}, 'loginName', function (err, data1) {
-        if (data1) {
-            var suffix = '-' + StringUtil.randomLetters(3);
-            User.findOne({loginName: mUser.loginName + suffix}, 'loginName', function (data2) {
-                if (data2) {
-                    cb(new BaseError('this loginName conflict'));
-                } else {
-                    mUser.loginName += suffix;
-                    saveUser();
-                }
-            });
+    User.findOne({loginName: user.loginName}, 'loginName', function (err, loginName) {
+        if(err){
+	        cb(err);
+        }else if (loginName) {
+	        cb(new BaseError('loginName conflict'));
         } else {
-            saveUser();
+            saveUser(user,cb);
         }
     });
 
-    function saveUser() {
-        var md5 = crypto.createHash('md5');
-        md5.update(mUser.pwd);
-        mUser.pwd = md5.digest('hex');
-
-        if(!mUser.nickName) mUser.nickName = mUser.loginName;
-        mUser.letterName = letter(mUser.nickName);
-
-        mUser.save(function (err) {
-            if (err) {
-                cb(err);
-            } else {
-                cb(err, mUser);
-            }
-        });
-    }
 }
+
 /**
  * @param user
  * {
@@ -167,4 +142,17 @@ function userValid(user, cb) {
     }
 
     return true;
+}
+
+function saveUser(user,cb) {
+	var md5 = crypto.createHash('md5');
+	md5.update(user.pwd);
+	user.pwd = md5.digest('hex');
+
+	if(!user.nickName) user.nickName = user.loginName;
+	user.letterName = letter(user.nickName);
+
+	User.create(user,function (err) {
+		cb(err);
+	});
 }
