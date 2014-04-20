@@ -48,6 +48,7 @@ exports.groupChatHandler = function(socket, data, cb) {
 		if (data.type == 'message') {
 			var message = {
 				from : socket.$$sessionUser.id,
+				fromRefId : socket.$$sessionUser.refId,
 				fromNickName : socket.$$sessionUser.nickName,
 				to : data.to,
 				orgId : socket.$$sessionUser.orgId,
@@ -89,8 +90,9 @@ exports.groupChatHandler = function(socket, data, cb) {
 exports.whisperHandler = function(socket, data, cb) {
 	var message = {
 		from : socket.$$sessionUser.id,
-		to : data.to,
+		fromRefId : socket.$$sessionUser.refId,
 		fromNickName : socket.$$sessionUser.nickName,
+		to : data.to,
 		orgId : socket.$$sessionUser.orgId,
 		content : data.content
 	}
