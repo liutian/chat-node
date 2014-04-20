@@ -212,13 +212,13 @@ function saveUser(user,cb) {
 
 function wrapSession(sSession,gSession){
 	var sessionList = [];
-	_.map(sSession,function(key,value){
+	_.each(sSession,function(value,key){
 		value.id = key;
 		value.isGroup = false;
 		sessionList.push(value);
 	});
 
-	_.map(gSession,function(key,value){
+	_.each(gSession,function(value,key){
 		value.id = key;
 		value.isGroup = true;
 		sessionList.push(value);

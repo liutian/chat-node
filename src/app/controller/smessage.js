@@ -1,7 +1,8 @@
 var smessageService = require('../service/SMessageService'),
 	log4js = require('log4js'),
 	JPush = require('jpush-sdk'),
-	moment = require('moment');
+	moment = require('moment'),
+	_ = require('underscore');
 
 var logger = log4js.getLogger();
 var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: global.prop.jpush.masterSecret});
@@ -59,6 +60,9 @@ module.exports = function(app){
 				return;
 			}
 
+			_.each(messages,function(message){
+				convertMessage(message);
+			});
 			res.json(messages);
 		});
 	});
