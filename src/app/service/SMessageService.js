@@ -26,13 +26,30 @@ exports.getMessage = function(id,cb){
 	SMessage.findById(id,cb);
 }
 
-exports.findMessage = function(sessionId,startDate,skip,limit,cb){
-	SMessage.find({sessionId : sessionId,createDate : {$lte : startDate}})
+exports.findMessage = function(params,cb){
+	if(params.id){
+		findMessageCallBack(params.id,params,cb);
+	}else if(params.refId){
+		User.findOne({refId : params.refId},function(err,user){
+			if(err){
+				cb(err);
+			}else if(!user){
+			 	cb(new BaseError('this user not exists'));
+			}else{
+				findMessageCallBack(err,user.id,params,cb);
+			}
+		});
+	}
+
+}
+
+function findMessageCallBack(sessionId,params,cb){
+	SMessage.find({sessionId : sessionId,createDate : {$lte : params.startDate}})
 		.populate({
 			path : 'from to',
 			select : 'refId loginName nickName profilePhoto'
 		})
-		.sort('createDate').skip(skip).limit(limit)
+		.sort('createDate').skip(params.skip).limit(params.limit)
 		.exec(cb);
 }
 

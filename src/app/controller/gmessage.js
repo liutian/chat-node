@@ -40,7 +40,7 @@ module.exports = function(app){
 	});
 
 	app.post('/api/findGMessage',function(req,res){
-		if(!req.body.id || !req.body.startDate || !req.body.pageNum){
+		if((!req.body.refId && !req.body.id) || !req.body.startDate || !req.body.pageNum){
 			res.json({code : 10001,msg : 'missing parameters'});
 			return;
 		}
@@ -48,7 +48,15 @@ module.exports = function(app){
 		var limit = 10;
 		var skip = (req.body.pageNum - 1) * limit;
 
-		gmessageService.findMessage(req.body.id,req.body.startDate,skip,limit,function(err,messages){
+		var params = {
+			startDate : req.body.startDate,
+			skip : skip,
+			limit : limit,
+			refId : req.body.refId,
+			id : req.body.id,
+			orgId : req.body.orgId
+		}
+		gmessageService.findMessage(params,function(err,messages){
 			if(err){
 				logger.error(err);
 				res.json({code : 10001,msg : err.message});

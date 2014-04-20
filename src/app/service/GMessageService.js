@@ -46,16 +46,16 @@ exports.getMessage = function(id,currUserId,cb){
 	});
 }
 
-exports.findMessage = function(groupId,startDate,skip,limit,cb){
-	GMessage.find({to : groupId,createDate : {$lte : startDate}})
-		.populate({
-			path : 'from',
-			select : 'refId loginName nickName profilePhoto'
-		})
-		.sort('createDate').skip(skip).limit(limit)
-		.exec(function(err,messages){
-			cb(err,messages);
+exports.findMessage = function(params,cb){
+	if(params.id){
+		Group.findOne({id : params.id,members : params.currUserId},function(err,group){
+			findMessageCallBack(err,group,params,cb);
 		});
+	}else if(params.refId){
+		Group.findOne({refId : params.refId,orgId : params.orgId,members : params.currUserId},function(err,group){
+			findMessageCallBack(err,group,params,cb);
+		});
+	}
 }
 
 exports.historySessionClearZero = function(currUserId,targetGroupId,cb){
@@ -157,4 +157,23 @@ function validateGMessage(gmessage, cb) {
 		return false;
 	}
 	return true;
+}
+
+
+function findMessageCallBack(err,group,params,cb){
+	if(err){
+		cb(err);
+	}else if(!group){
+		cb(new BaseError('this group not exists or you have no right'));
+	}else{
+		GMessage.find({to : group.id,createDate : {$lte : params.startDate}})
+			.populate({
+				path : 'from',
+				select : 'refId loginName nickName profilePhoto'
+			})
+			.sort('createDate').skip(params.skip).limit(params.limit)
+			.exec(function(err,messages){
+				cb(err,messages);
+			});
+	}
 }
