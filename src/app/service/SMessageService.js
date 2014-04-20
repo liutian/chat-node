@@ -26,18 +26,6 @@ exports.getMessage = function(id,cb){
 	SMessage.findById(id,cb);
 }
 
-exports.getHistorySession = function(userId,cb){
-	User.findById(userId,function(err,user){
-		var historySession = {};
-
-		if(user){
-			historySession.session = user.whisperSession;
-			historySession.unreadCount = user.whisperSessionUnreadCount;
-		}
-
-		cb(err,historySession);
-	});
-}
 
 exports.findNewMessage = function (userId, orgId, cb) {
     SMessage.find({to: userId, orgId: orgId, read: 'n'})

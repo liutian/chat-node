@@ -78,6 +78,21 @@ exports.signIn = function (user, cb) {
         }
     });
 }
+
+exports.getSHistorySession = function(userId,cb){
+	User.findById(userId,function(err,user){
+		var historySession = {};
+
+		if(user){
+			historySession.session = user.whisperSession;
+			historySession.unreadCount = user.whisperSessionUnreadCount;
+		}
+
+		cb(err,historySession);
+	});
+}
+
+
 /**
  * @param user
  * {
