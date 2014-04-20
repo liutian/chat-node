@@ -21,7 +21,9 @@ var UserSchema = new Schema({
     groups : [{type : Schema.Types.ObjectId ,ref : 'group'}],
     createDate : {type : Date , default : Date.now},
 	whisperSession : {},
-	whisperSessionUnreadCount : {}
+	whisperSessionUnreadCount : {},
+	groupSession : {},
+	groupSessionUnreadCount : {}
 });
 
 mongoose.model('user', UserSchema);

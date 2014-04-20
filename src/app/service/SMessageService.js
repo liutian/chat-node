@@ -111,7 +111,7 @@ function _send (err,toUser,smessage,cb){
 	if(err){
 		cb(err);
 	}else if(!toUser){
-		cb(new BaseError('user:%s not exists ', smessage.to || smessage.refId));
+		cb(new BaseError('user:%s not exists ', smessage.to || smessage.toRefId));
 	}else{
 		smessage.sessionId = util.createSessionId(smessage.from,toUser.id);
 		smessage.to = toUser.id;
