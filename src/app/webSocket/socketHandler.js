@@ -40,16 +40,17 @@ exports.groupChatHandler = function(socket, data, cb) {
 	}
 
 	if (data.type == 'join' || data.type == 'leave' || data.type == 'message') {
-		if (!socket.$$userId) {
-			cb && cb({code: 10001, msg: 'current socket have no $$userId'});
+		if (!socket.$$sessionUser || !socket.$$sessionUser.id) {
+			cb && cb({code: 10001, msg: 'current socket have no $$sessionUser.id'});
 			return;
 		}
 
 		if (data.type == 'message') {
 			var message = {
-				from : socket.$$userId,
+				from : socket.$$sessionUser.id,
+				fromNickName : socket.$$sessionUser.nickName,
 				to : data.to,
-				orgId : socket.$$orgId,
+				orgId : socket.$$sessionUser.orgId,
 				content : data.content
 			}
 
@@ -60,7 +61,7 @@ exports.groupChatHandler = function(socket, data, cb) {
 					return;
 				}
 
-				webSocketService.groupChat(data.to, socket.$$userId, data, cb);
+				webSocketService.groupChat(data.to, socket.$$sessionUser.id, data, cb);
 				jpushClient.sendNotificationWithTag(global.prop.jpush.groupChatSendNo,message.to,'群聊',message.content,function(err,body){
 					if(err){
 						logger.error(err);
@@ -68,7 +69,7 @@ exports.groupChatHandler = function(socket, data, cb) {
 				});
 			});
 		} else {
-			var _sockets = global.appData.socketIO.sockets[socket.$$userId];
+			var _sockets = global.appData.socketIO.sockets[socket.$$sessionUser.id];
 			var bool = false;
 
 			webSocketService.iteratorSockets(_sockets, function (socketId) {
@@ -87,9 +88,9 @@ exports.groupChatHandler = function(socket, data, cb) {
 
 exports.whisperHandler = function(socket, data, cb) {
 	var message = {
-		from : socket.$$userId,
+		from : socket.$$sessionUser.id,
 		to : data.to,
-		orgId : socket.$$orgId,
+		orgId : socket.$$sessionUser.orgId,
 		content : data.content
 	}
 

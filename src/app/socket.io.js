@@ -57,8 +57,7 @@ function saveSockets(socket,io) {
 
 			if (_sockets[sess.user.id].indexOf(socketId) == -1) {
 				_sockets[sess.user.id].unshift(socketId);
-				socket.$$userId = sess.user.id;
-				socket.$$orgId = sess.user.orgId;
+				socket.$$sessionUser = sess.user;
 			}
 		}
 	});
