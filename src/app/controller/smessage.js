@@ -12,6 +12,7 @@ module.exports = function(app){
 		var smessage = {
 			refId : req.body.toUserId,
 			from : req.session.user.id,
+			fromNickName : req.session.user.nickName,
 			orgId : req.session.user.orgId,
 			content : req.body.content,
 			type : req.body.type,
