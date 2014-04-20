@@ -26,6 +26,16 @@ exports.getMessage = function(id,cb){
 	SMessage.findById(id,cb);
 }
 
+exports.findMessage = function(sessionId,startDate,skip,limit,cb){
+	SMessage.find({sessionId : sessionId,createDate : {$lte : startDate}})
+		.populate({
+			path : 'from to',
+			select : 'refId loginName nickName profilePhoto'
+		})
+		.sort('createDate').skip(skip).limit(limit)
+		.exec(cb);
+}
+
 
 exports.findNewMessage = function (userId, orgId, cb) {
     SMessage.find({to: userId, orgId: orgId, read: 'n'})

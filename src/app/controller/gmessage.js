@@ -38,6 +38,26 @@ module.exports = function(app){
 		});
 	});
 
+	app.post('/api/findGMessage',function(req,res){
+		if(!req.body.id || !req.body.startDate || !req.body.pageNum){
+			res.json({code : 10001,msg : 'missing parameters'});
+			return;
+		}
+
+		var limit = 10;
+		var skip = (req.body.pageNum - 1) * limit;
+
+		gmessageService.findMessage(req.body.id,req.body.startDate,skip,limit,function(err,messages){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+				return;
+			}
+
+			res.json(messages);
+		});
+	});
+
 	app.get('/api/findNewGMessage',function(req,res){
 		var currUser = req.session.user;
 		gmessageService.findNewMessage(currUser.id,currUser.orgId,function(err,gmessages){

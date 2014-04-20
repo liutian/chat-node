@@ -43,6 +43,26 @@ module.exports = function(app){
 		});
 	});
 
+	app.post('/api/findSMessage',function(req,res){
+		if(!req.body.id || !req.body.startDate || !req.body.pageNum){
+			res.json({code : 10001,msg : 'missing parameters'});
+			return;
+		}
+
+		var limit = 10;
+		var skip = (req.body.pageNum - 1) * limit;
+
+		smessageService.findMessage(req.body.id,req.body.startDate,skip,limit,function(err,messages){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+				return;
+			}
+
+			res.json(messages);
+		});
+	});
+
 	app.get('/api/findNewSMessage',function(req,res){
 		var currUser = req.session.user;
 		smessageService.findNewMessage(currUser.id,currUser.orgId,function(err,gmessages){

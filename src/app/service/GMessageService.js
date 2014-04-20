@@ -52,6 +52,18 @@ exports.getMessage = function(id,currUserId,cb){
 	});
 }
 
+exports.findMessage = function(groupId,startDate,skip,limit,cb){
+	GMessage.find({to : groupId,createDate : {$lte : startDate}})
+		.populate({
+			path : 'from',
+			select : 'refId loginName nickName profilePhoto'
+		})
+		.sort('createDate').skip(skip).limit(limit)
+		.exec(function(err,messages){
+			cb(err,messages);
+		});
+}
+
 //进入群列表时查询每个群中自己未读的消息总数，以及每个群的最后一条消息
 exports.findNewMessage = function (userId, orgId, cb) {
 	GMessage.find({orgId: orgId, unread: {$all: [userId]}}, '-unread')
