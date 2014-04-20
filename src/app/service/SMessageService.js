@@ -1,8 +1,9 @@
 var mongoose = require('mongoose')
     , _ = require('underscore')
+	,log4js = require('log4js')
     , BaseError = require('../common/BaseError.js');
 
-
+var logger = log4js.getLogger();
 var SMessage = mongoose.model('smessage');
 var User = mongoose.model('user');
 
@@ -22,6 +23,12 @@ exports.send = function (smessage, cb) {
 
 exports.getMessage = function(id,cb){
 	SMessage.findById(id,cb);
+}
+
+exports.getHistorySessions = function(userId,orgId,cb){
+	SMessage.collection.group({
+
+	});
 }
 
 exports.findNewMessage = function (userId, orgId, cb) {
@@ -104,26 +111,54 @@ function validateSMessage(smessage, cb) {
     return true;
 }
 
-function _send (err,user,smessage,cb){
+function _send (err,toUser,smessage,cb){
 	if(err){
 		cb(err);
-	}else if(!user){
+	}else if(!toUser){
 		cb(new BaseError('user:%s not exists ', smessage.to || smessage.refId));
 	}else{
-		smessage.to = user.id;
+		smessage.to = toUser.id;
 		smessage.contentText = smessage.content;
 
 		if(smessage.type == 1){
 			smessage.content = '<a href="'+ smessage.filePath[0] +'"><img src="'+ smessage.filePath[1] +'"></a>';
 			smessage.contentText = '[图片]' + smessage.fileName;
-		}else if(smessage.type = 2){
+		}else if(smessage.type == 2){
 			smessage.content = '<a href="'+ smessage.filePath[0] +'">'+ smessage.fileName +'</a>';
 			smessage.contentText = '[文件]' + smessage.fileName;
 		}
 
 		var mSMessage = new SMessage(smessage);
 		mSMessage.save(function(err){
-			cb(err,mSMessage,user);
+			if(!err){
+				saveHistorySession(mSMessage,smessage,toUser);
+			}
+
+			cb(err,mSMessage,toUser);
 		});
 	}
+}
+
+function saveHistorySession(mSMessage,smessage,toUser){
+	var toSession = {};
+	toSession['whisperSession.' + smessage.from] = {
+		name : smessage.fromNickName,
+		date : mSMessage.createDate,
+		contentText : mSMessage.contentText.substr(0,20)
+	};
+	var toSessionUnreadCount = {};
+	toSessionUnreadCount['whisperSessionUnreadCount.' + smessage.from] = 1;
+	User.findByIdAndUpdate(toUser.id,{$set : toSession,$inc : toSessionUnreadCount},function(err){
+		if(err) logger.error(err);
+	});
+
+	var fromSession = {};
+	fromSession['whisperSession.' + toUser.id] = {
+		name : toUser.nickName,
+		date : mSMessage.createDate,
+		contentText : mSMessage.contentText.substr(0,20)
+	}
+	User.findByIdAndUpdate(smessage.from,{$set : fromSession},function(err){
+		if(err) logger.error(err);
+	});
 }
