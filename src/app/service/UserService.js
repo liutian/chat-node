@@ -92,6 +92,35 @@ exports.getSHistorySession = function(userId,cb){
 	});
 }
 
+exports.getGHistorySession = function(userId,cb){
+	User.findById(userId,function(err,user){
+		var historySession = {};
+
+		if(user){
+			historySession.session = user.groupSession;
+			historySession.unreadCount = user.groupSessionUnreadCount;
+		}
+
+		cb(err,historySession);
+	});
+}
+
+exports.getAllHistorySession = function(userId,cb){
+	exports.getSHistorySession(userId,function(err,sSession){
+		if(!err){
+			exports.getGHistorySession(userId,function(err,gSession){
+				if(!err){
+					cb(null,wrapSession(sSession,gSession));
+				}else{
+					cb(err);
+				}
+			});
+		}else{
+			cb(err);
+		}
+	});
+}
+
 
 /**
  * @param user
@@ -179,4 +208,25 @@ function saveUser(user,cb) {
 	User.create(user,function (err) {
 		cb(err);
 	});
+}
+
+function wrapSession(sSession,gSession){
+	var sessionList = [];
+	_.map(sSession,function(key,value){
+		value.id = key;
+		value.isGroup = false;
+		sessionList.push(value);
+	});
+
+	_.map(gSession,function(key,value){
+		value.id = key;
+		value.isGroup = true;
+		sessionList.push(value);
+	});
+
+	sessionList.sort(function(a,b){
+		return a.createDate < b.createDate ? 1 : -1;
+	});
+
+	return sessionList;
 }
