@@ -90,6 +90,7 @@ exports.whisperHandler = function(socket, data, cb) {
 	var message = {
 		from : socket.$$sessionUser.id,
 		to : data.to,
+		fromNickName : socket.$$sessionUser.nickName,
 		orgId : socket.$$sessionUser.orgId,
 		content : data.content
 	}

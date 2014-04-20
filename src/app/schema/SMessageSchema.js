@@ -14,7 +14,8 @@ var SMessageSchema = new Schema({
     orgId : {type : Number,required : true},
 	type : {type : Number,enum : [0,1,2],default : 0},
 	filePath : [String],
-	fileName : String
+	fileName : String,
+	sessionId : String
 });
 
 mongoose.model('smessage', SMessageSchema);

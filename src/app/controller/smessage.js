@@ -10,8 +10,9 @@ var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: g
 module.exports = function(app){
 	app.put('/api/smessage',function(req,res){
 		var smessage = {
-			refId : req.body.toUserId,
+			toRefId : req.body.toUserId,
 			from : req.session.user.id,
+			fromRefId : req.session.user.refId,
 			fromNickName : req.session.user.nickName,
 			orgId : req.session.user.orgId,
 			content : req.body.content,

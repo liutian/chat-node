@@ -1,7 +1,8 @@
 var mongoose = require('mongoose')
     , _ = require('underscore')
 	,log4js = require('log4js')
-    , BaseError = require('../common/BaseError.js');
+    ,BaseError = require('../common/BaseError.js')
+	,util = require('../common/util.js');
 
 var logger = log4js.getLogger();
 var SMessage = mongoose.model('smessage');
@@ -15,7 +16,7 @@ exports.send = function (smessage, cb) {
 	        _send(err,user,smessage,cb);
 		});
 	}else{
-		User.find({refId : smessage.refId},function(err,user){
+		User.find({refId : smessage.toRefId},function(err,user){
 			_send(err,user,smessage,cb);
 		});
     }
@@ -25,9 +26,16 @@ exports.getMessage = function(id,cb){
 	SMessage.findById(id,cb);
 }
 
-exports.getHistorySessions = function(userId,orgId,cb){
-	SMessage.collection.group({
+exports.getHistorySession = function(userId,cb){
+	User.findById(userId,function(err,user){
+		var historySession = {};
 
+		if(user){
+			historySession.session = user.whisperSession;
+			historySession.unreadCount = user.whisperSessionUnreadCount;
+		}
+
+		cb(err,historySession);
 	});
 }
 
@@ -96,8 +104,8 @@ function validateSMessage(smessage, cb) {
         cb(new BaseError('smessage need from'));
         return false;
     }
-    if (!smessage.to && !smessage.refId) {
-        cb(new BaseError('smessage need to or refId'));
+    if (!smessage.to && !smessage.toRefId) {
+        cb(new BaseError('smessage need to or toRefId'));
         return false;
     }
     if (smessage.from == smessage.to) {
@@ -117,6 +125,7 @@ function _send (err,toUser,smessage,cb){
 	}else if(!toUser){
 		cb(new BaseError('user:%s not exists ', smessage.to || smessage.refId));
 	}else{
+		smessage.sessionId = util.createSessionId(smessage.from,toUser.id);
 		smessage.to = toUser.id;
 		smessage.contentText = smessage.content;
 
@@ -126,6 +135,8 @@ function _send (err,toUser,smessage,cb){
 		}else if(smessage.type == 2){
 			smessage.content = '<a href="'+ smessage.filePath[0] +'">'+ smessage.fileName +'</a>';
 			smessage.contentText = '[文件]' + smessage.fileName;
+		}else{
+			smessage.type = 0;
 		}
 
 		var mSMessage = new SMessage(smessage);
@@ -140,12 +151,20 @@ function _send (err,toUser,smessage,cb){
 }
 
 function saveHistorySession(mSMessage,smessage,toUser){
-	var toSession = {};
-	toSession['whisperSession.' + smessage.from] = {
-		name : smessage.fromNickName,
+	var _session = {
+		from : mSMessage.from,
+		fromRefId : smessage.fromRefId,
+		to : mSMessage.to,
+		toRefId : toUser.refId,
+		type : mSMessage.type,
+		fromNickName : smessage.fromNickName,
+		toNickName : toUser.nickName,
 		date : mSMessage.createDate,
 		contentText : mSMessage.contentText.substr(0,20)
-	};
+	}
+
+	var toSession = {};
+	toSession['whisperSession.' + smessage.from] = _session;
 	var toSessionUnreadCount = {};
 	toSessionUnreadCount['whisperSessionUnreadCount.' + smessage.from] = 1;
 	User.findByIdAndUpdate(toUser.id,{$set : toSession,$inc : toSessionUnreadCount},function(err){
@@ -153,11 +172,7 @@ function saveHistorySession(mSMessage,smessage,toUser){
 	});
 
 	var fromSession = {};
-	fromSession['whisperSession.' + toUser.id] = {
-		name : toUser.nickName,
-		date : mSMessage.createDate,
-		contentText : mSMessage.contentText.substr(0,20)
-	}
+	fromSession['whisperSession.' + toUser.id] = _session;
 	User.findByIdAndUpdate(smessage.from,{$set : fromSession},function(err){
 		if(err) logger.error(err);
 	});
