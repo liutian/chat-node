@@ -4,7 +4,7 @@ module.controller('ctrl', function ($scope, $http) {
 
 	$scope.login = function () {
 		$http({
-			url: '/login',
+			url: '/signIn',
 			method: 'post',
 			data: {loginName: $scope.username, pwd: $scope.password}
 		}).success(function (data) {
