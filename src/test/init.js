@@ -8,4 +8,3 @@
 
 var mongoose = require('mongoose');
 require('../app/schema');
-mongoose.set('debug',true);
