@@ -58,6 +58,24 @@ exports.findMessage = function(groupId,startDate,skip,limit,cb){
 		});
 }
 
+exports.historySessionClearZero = function(currUserId,targetGroupId,cb){
+	var unreadCount = {};
+	unreadCount['groupSessionUnreadCount.' + targetGroupId] = 0;
+	GMessage.findById(currUserId,{$set: unreadCount},function(err){
+		cb(err);
+	});
+}
+
+exports.historySessionClearZeroRefId = function(currUserId,refId,cb){
+	Group.find({refId : refId},function(err,group){
+		if(group){
+			exports.historySessionClearZero(currUserId,group.id,cb);
+		}else{
+			cb(err);
+		}
+	});
+}
+
 function _send(err, group,gmessage, cb) {
 	if (err) {
 		cb(err);

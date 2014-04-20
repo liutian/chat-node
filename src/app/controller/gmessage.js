@@ -58,29 +58,15 @@ module.exports = function(app){
 		});
 	});
 
-	app.get('/api/findNewGMessage',function(req,res){
-		var currUser = req.session.user;
-		gmessageService.findNewMessage(currUser.id,currUser.orgId,function(err,gmessages){
+	app.post('/api/gHistorySessionClearZero',function(req,res){
+		gmessageService.historySessionClearZeroRefId(req.session.user.id,req.body.id,function(err){
 			if(err){
 				logger.error(err);
 				res.json({code : 10001,msg : err.message});
 				return;
+			}else{
+				res.json({code : 10000});
 			}
-
-			res.json(gmessages);
-		});
-	});
-
-	app.get('/api/findUnreadGMessages/:groupId',function(req,res){
-		var currUser = req.session.user;
-		gmessageService.findUnreadMessages(currUser.id,req.params.groupId,currUser.orgId,function(err,gmessages){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-				return;
-			}
-
-			res.json(gmessages);
 		});
 	});
 }

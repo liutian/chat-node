@@ -63,29 +63,15 @@ module.exports = function(app){
 		});
 	});
 
-	app.get('/api/findNewSMessage',function(req,res){
-		var currUser = req.session.user;
-		smessageService.findNewMessage(currUser.id,currUser.orgId,function(err,gmessages){
+	app.post('/api/sHistorySessionClearZero',function(req,res){
+		smessageService.historySessionClearZeroRefId(req.session.user.id,req.body.id,function(err){
 			if(err){
 				logger.error(err);
 				res.json({code : 10001,msg : err.message});
 				return;
+			}else{
+				res.json({code : 10000});
 			}
-
-			res.json(gmessages);
-		});
-	});
-
-	app.get('/api/findUnreadSMessages/:userId',function(req,res){
-		var currUser = req.session.user;
-		smessageService.findUnreadMessages(req.params.userId,currUser.id,currUser.orgId,function(err,gmessages){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-				return;
-			}
-
-			res.json(gmessages);
 		});
 	});
 }

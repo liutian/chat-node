@@ -36,6 +36,24 @@ exports.findMessage = function(sessionId,startDate,skip,limit,cb){
 		.exec(cb);
 }
 
+exports.historySessionClearZero = function(currUserId,targetUserId,cb){
+	var unreadCount = {};
+	unreadCount['whisperSessionUnreadCount.' + targetUserId] = 0;
+	SMessage.findById(currUserId,{$set: unreadCount},function(err){
+		cb(err);
+	});
+}
+
+exports.historySessionClearZeroRefId = function(currUserId,refId,cb){
+	User.find({refId : refId},function(err,user){
+		if(user){
+			exports.historySessionClearZero(currUserId,user.id,cb);
+		}else{
+			cb(err);
+		}
+	});
+}
+
 
 function validateSMessage(smessage, cb) {
     if (smessage.type != 1 && smessage.type != 2
