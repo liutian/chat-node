@@ -29,6 +29,11 @@ exports.signUp = function (user, cb) {
 		return;
 	}
 
+	if (!user.refId) {
+		cb(new BaseError('need refId'));
+		return;
+	}
+
     User.findOne({loginName: user.loginName}, 'loginName', function (err, loginName) {
         if(err){
 	        cb(err);
@@ -81,12 +86,10 @@ exports.signIn = function (user, cb) {
 
 exports.getSHistorySession = function(userId,cb){
 	User.findById(userId,function(err,user){
-		var historySession = {};
-
-		if(user){
-			historySession.session = user.whisperSession;
-			historySession.unreadCount = user.whisperSessionUnreadCount;
-		}
+		var historySession = {
+			session : user.whisperSession || {},
+			unreadCount : user.whisperSessionUnreadCount || {}
+		};
 
 		cb(err,historySession);
 	});
@@ -94,12 +97,10 @@ exports.getSHistorySession = function(userId,cb){
 
 exports.getGHistorySession = function(userId,cb){
 	User.findById(userId,function(err,user){
-		var historySession = {};
-
-		if(user){
-			historySession.session = user.groupSession;
-			historySession.unreadCount = user.groupSessionUnreadCount;
-		}
+		var historySession = {
+			session : user.groupSession || {},
+			unreadCount : user.groupSessionUnreadCount || {}
+		};
 
 		cb(err,historySession);
 	});
@@ -204,6 +205,13 @@ function saveUser(user,cb) {
 
 	if(!user.nickName) user.nickName = user.loginName;
 	user.letterName = letter(user.nickName);
+	if(!user.profilePhoto){
+		if(user.sex == 'w'){
+			user.profilePhoto = 'http://192.168.16.48:3000/images/woman.jpg';
+		}else{
+			user.profilePhoto = 'http://192.168.16.48:3000/images/man.jpg';
+		}
+	}
 
 	User.create(user,function (err) {
 		cb(err);
@@ -212,20 +220,22 @@ function saveUser(user,cb) {
 
 function wrapSession(sSession,gSession){
 	var sessionList = [];
-	_.each(sSession,function(value,key){
+	_.each(sSession.session,function(value,key){
 		value.id = key;
 		value.isGroup = false;
+		value.unreadCount = sSession.unreadCount[key];
 		sessionList.push(value);
 	});
 
-	_.each(gSession,function(value,key){
+	_.each(gSession.session,function(value,key){
 		value.id = key;
 		value.isGroup = true;
+		value.unreadCount = gSession.unreadCount[key];
 		sessionList.push(value);
 	});
 
 	sessionList.sort(function(a,b){
-		return a.createDate < b.createDate ? 1 : -1;
+		return a.createDate > b.createDate ? 1 : -1;
 	});
 
 	return sessionList;

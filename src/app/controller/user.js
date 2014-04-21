@@ -31,7 +31,7 @@ module.exports = function(app){
 	});
 
 	app.get('/api/historySession',function(req,res){
-		userService.getAllHistorySession(req.session.user,function(err,sessions){
+		userService.getAllHistorySession(req.session.user.id,function(err,sessions){
 			if(err){
 				logger.error(err);
 				res.json({code : 10001,msg : err.message});
