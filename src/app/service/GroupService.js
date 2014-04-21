@@ -21,20 +21,31 @@ exports.create = function (group, cb) {
     if (!createValidate(group, cb)) {
         return;
     }
-    User.findById(group.founder, function (err, user) {
-        if (err) {
-            cb(err);
-        } else if (!user) {
-            cb(new BaseError('this user not find userId:%s', group.founder));
-        } else {
-            var mGroup = new Group(group);
-            mGroup.members.push(group.founder);
-            mGroup.letterName = letter(mGroup.name);
-            mGroup.save(function (err) {
-                cb(err);
-            });
-        }
-    });
+
+	if(group.founder){
+	    User.findById(group.founder, function (err, user) {
+		    createCallBack(err,user,group,cb);
+	    });
+	}else{
+		User.findOne({refId : group.founderRefId},function(err,user){
+			createCallBack(err,user,group,cb);
+		});
+	}
+}
+
+function createCallBack(err,user,group,cb){
+	if (err) {
+		cb(err);
+	} else if (!user) {
+		cb(new BaseError('this user not find userId:%s', group.founder));
+	} else {
+		var mGroup = new Group(group);
+		mGroup.members.push(group.founder);
+		mGroup.letterName = letter(mGroup.name);
+		mGroup.save(function (err) {
+			cb(err);
+		});
+	}
 }
 
 exports.disband = function (userId, groupId, cb) {
@@ -113,16 +124,12 @@ function createValidate(group, cb) {
         cb(new BaseError('need orgId'));
         return false;
     }
-	if(!group.refId){
-		cb(new BaseError('need refId'));
-		return false;
-	}
     if (!group.name) {
         cb(new BaseError('need group name'));
         return false;
     }
-    if (!group.founder) {
-        cb(new BaseError('need group founder'));
+    if (!group.founder && !group.founderRefId) {
+        cb(new BaseError('need group founder or founderRefId'));
         return false;
     }
     return true;
