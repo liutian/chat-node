@@ -92,18 +92,36 @@ exports.exit = function (userId, groupId, cb) {
     });
 }
 
-exports.rename = function (userId, groupId, name, cb) {
-    Group.findById(groupId, function (err, group) {
-        if (!group) {
-            cb(new BaseError('this group not exists ,groupId:%s', groupId));
-        } else if (group.founder != userId) {
-            cb(new BaseError('you have no right to rename this group ,userId:%s groupId:%s', userId, groupId));
-        } else {
-            group.name = name;
-            group.letterName = letter(name);
-            group.save(cb);
-        }
-    });
+exports.editGroup = function (group, cb) {
+	if(group.id){
+		Group.findById(group.id,function(err,mgroup){
+			editGroupCallBack(err,mgroup,group,cb);
+		});
+	}else if(group.refId){
+		Group.findOne({refId : group.refId},function(err,mgroup){
+			editGroupCallBack(err,mgroup,group,cb);
+		})
+	}else{
+		cb(new BaseError('need id or refId'));
+	}
+}
+
+function editGroupCallBack(err,mgroup,group,cb){
+	if(err){
+	   cb(err);
+	}else if(!mgroup) {
+		cb(new BaseError('this group not exists ,id:%s', group.id || group.refId));
+	} else {
+		if(group.name){
+			mgroup.name = group.name;
+			mgroup.letterName = letter(group.name);
+		}
+		if(group.profilePhoto){
+			mgroup.profilePhoto = group.profilePhoto;
+		}
+
+		mgroup.save(cb);
+	}
 }
 
 exports.findGroupsAboutUser = function(userId,cb){

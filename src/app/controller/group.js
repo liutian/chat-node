@@ -16,4 +16,17 @@ module.exports = function(app){
 			res.json({code : 10000});
 		});
 	});
+
+
+	app.post('/editGroup',function(req,res){
+		groupService.editGroup(req.body,function(err){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+				return;
+			}
+
+			res.json({code : 10000});
+		});
+	});
 }
