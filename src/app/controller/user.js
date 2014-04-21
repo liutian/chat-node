@@ -41,7 +41,7 @@ module.exports = function(app){
 		});
 	});
 
-	app.post('/api/editUser',function(req,res){
+	app.post('/editUser',function(req,res){
 		userService.editUser(req.body,function(err){
 			if(err){
 				logger.error(err);
