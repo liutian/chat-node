@@ -14,6 +14,7 @@ module.exports = function(app){
 			from : req.session.user.id,
 			fromRefId : req.session.user.refId,
 			fromNickName : req.session.user.nickName,
+			fromProfilePhoto : req.session.user.profilePhoto,
 			orgId : req.session.user.orgId,
 			content : req.body.content,
 			type : req.body.type,

@@ -30,6 +30,17 @@ module.exports = function(app){
 		});
 	});
 
+	app.get('/api/historySession',function(req,res){
+		userService.getAllHistorySession(req.session.user,function(err,sessions){
+			if(err){
+				logger.error(err);
+				res.json({code : 10001,msg : err.message});
+			}else{
+				res.json(sessions);
+			}
+		});
+	});
+
 	app.post('/api/editUser',function(req,res){
 		userService.editUser(req.body,function(err){
 			if(err){

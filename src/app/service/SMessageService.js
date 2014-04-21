@@ -44,7 +44,11 @@ exports.findMessage = function(params,cb){
 }
 
 function findMessageCallBack(sessionId,params,cb){
-	SMessage.find({sessionId : sessionId,createDate : {$lte : params.startDate}})
+	var query = {sessionId : sessionId};
+	if(params.startDate){
+		query.createDate = {$lte : params.startDate};
+	}
+	SMessage.find(query)
 		.populate({
 			path : 'from to',
 			select : 'refId loginName nickName profilePhoto'
@@ -132,8 +136,10 @@ function saveHistorySession(mSMessage,smessage,toUser){
 	var _session = {
 		from : mSMessage.from,
 		fromRefId : smessage.fromRefId,
+		fromProfilePhoto : smessage.fromProfilePhoto,
 		to : mSMessage.to,
 		toRefId : toUser.refId,
+		toProfilePhoto : toUser.profilePhoto,
 		type : mSMessage.type,
 		fromNickName : smessage.fromNickName,
 		toNickName : toUser.nickName,

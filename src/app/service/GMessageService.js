@@ -111,8 +111,10 @@ function saveHistorySession(mGMessage,gmessage,group){
 	var _session = {
 		from : mGMessage.from,
 		fromRefId : gmessage.fromRefId,
+		fromProfilePhoto : gmessage.fromProfilePhoto,
 		to : mGMessage.to,
 		toRefId : group.refId,
+		toProfilePhoto : group.profilePhoto,
 		type : mGMessage.type,
 		fromNickName : gmessage.fromNickName,
 		toNickName : group.name,
@@ -166,7 +168,11 @@ function findMessageCallBack(err,group,params,cb){
 	}else if(!group){
 		cb(new BaseError('this group not exists or you have no right'));
 	}else{
-		GMessage.find({to : group.id,createDate : {$lte : params.startDate}})
+		var query = {to : group.id};
+		if(params.startDate){
+			query.createDate = {$lte : params.startDate};
+		}
+		GMessage.find(query)
 			.populate({
 				path : 'from',
 				select : 'refId loginName nickName profilePhoto'
