@@ -8,7 +8,7 @@ var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: g
 
 
 module.exports = function(app){
-	app.put('/api/gmessage',function(req,res){
+	app.post('/api/gmessage',function(req,res){
 		var gmessage = {
 			toRefId : req.body.toTeamId,
 			from : req.session.user.id,

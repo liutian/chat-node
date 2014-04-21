@@ -9,7 +9,7 @@ var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: g
 
 
 module.exports = function(app){
-	app.put('/api/smessage',function(req,res){
+	app.post('/api/smessage',function(req,res){
 		var smessage = {
 			toRefId : req.body.toUserId,
 			from : req.session.user.id,
@@ -46,7 +46,7 @@ module.exports = function(app){
 	});
 
 	app.post('/api/findSMessage',function(req,res){
-		if((!req.body.refId && !req.body.id) || !req.body.startDate || !req.body.pageNum){
+		if((!req.body.refId && !req.body.id) || !req.body.pageNum){
 			res.json({code : 10001,msg : 'missing parameters'});
 			return;
 		}
@@ -59,7 +59,8 @@ module.exports = function(app){
 			skip : skip,
 			limit : limit,
 			refId : req.body.refId,
-			id : req.body.id
+			id : req.body.id,
+			currUserId : req.session.user.id
 		}
 		smessageService.findMessage(params,function(err,messages){
 			if(err){
@@ -68,10 +69,11 @@ module.exports = function(app){
 				return;
 			}
 
+			var warpMessages = [];
 			_.each(messages,function(message){
-				convertMessage(message);
+				warpMessages.push(convertMessage(message));
 			});
-			res.json(messages);
+			res.json(warpMessages);
 		});
 	});
 
@@ -107,7 +109,7 @@ function sendCallBack(err,mSMessage,toUser,res,req){
 	}
 	res.json(convertMessage(mSMessage));
 
-	mobilePush(mSMessage);
+//	mobilePush(mSMessage);
 }
 
 function mobilePush(mSMessage){
@@ -143,19 +145,22 @@ function mobilePush(mSMessage){
 }
 
 function convertMessage(message){
-	message.fromUserId = message.from.refId;
-	message.fromUserName = message.from.nickName;
-	message.fromUserPhoto = message.from.profilePhoto;
-	message.toUserId = message.to.refId;
-	message.toUserName = message.to.nickName;
-	message.toUserPhoto = message.to.profilePhoto;
-	if(message.type == 1){
-		message.filePathUri = message.filePath[0];
-		message.filePathMidUri = message.filePath[1];
-	}else if(message.type == 2){
-		message.filePathUri = message.filePath[0];
-	}
-	message.createDateFmt = moment(message.createDate).format('YYYY-MM-dd HH:mm:ss');
+	var newMessage = message.toObject();
 
-	return message;
+	newMessage.id = message._id;
+	newMessage.fromUserId = message.from.refId;
+	newMessage.fromUserName = message.from.nickName;
+	newMessage.fromUserPhoto = message.from.profilePhoto;
+	newMessage.toUserId = message.to.refId;
+	newMessage.toUserName = message.to.nickName;
+	newMessage.toUserPhoto = message.to.profilePhoto;
+	if(message.type == 1){
+		newMessage.filePathUri = message.filePath[0];
+		newMessage.filePathMidUri = message.filePath[1];
+	}else if(message.type == 2){
+		newMessage.filePathUri = message.filePath[0];
+	}
+	newMessage.createDateFmt = moment(message.createDate).format('YYYY-MM-dd HH:mm:ss');
+
+	return newMessage;
 }
