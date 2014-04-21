@@ -177,7 +177,7 @@ function findMessageCallBack(err,group,params,cb){
 				path : 'from',
 				select : 'refId loginName nickName profilePhoto'
 			})
-			.sort('createDate').skip(params.skip).limit(params.limit)
+			.sort('-createDate').skip(params.skip).limit(params.limit)
 			.exec(function(err,messages){
 				cb(err,messages);
 			});

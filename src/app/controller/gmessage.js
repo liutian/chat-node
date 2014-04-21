@@ -64,8 +64,9 @@ module.exports = function(app){
 				return;
 			}
 
+			var warpMessages = [];
 			_.each(messages,function(message){
-				convertMessage(message);
+				warpMessages.unshift(convertMessage(message));
 			});
 			res.json(messages);
 		});

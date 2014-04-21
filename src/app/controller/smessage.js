@@ -71,7 +71,7 @@ module.exports = function(app){
 
 			var warpMessages = [];
 			_.each(messages,function(message){
-				warpMessages.push(convertMessage(message));
+				warpMessages.unshift(convertMessage(message));
 			});
 			res.json(warpMessages);
 		});
@@ -160,6 +160,7 @@ function convertMessage(message){
 	}else if(message.type == 2){
 		newMessage.filePathUri = message.filePath[0];
 	}
+	newMessage.createDate = message.createDate ? message.createDate.getTime() : 0;
 	newMessage.createDateFmt = moment(message.createDate).format('YYYY-MM-dd HH:mm:ss');
 
 	return newMessage;

@@ -60,7 +60,7 @@ function findMessageCallBack(err,sessionId,params,cb){
 			path : 'from to',
 			select : 'refId loginName nickName profilePhoto'
 		})
-		.sort('createDate').skip(params.skip).limit(params.limit)
+		.sort('-createDate').skip(params.skip).limit(params.limit)
 		.exec(cb);
 }
 
