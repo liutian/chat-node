@@ -223,14 +223,16 @@ function wrapSession(sSession,gSession){
 	_.each(sSession.session,function(value,key){
 		value.id = key;
 		value.isGroup = false;
-		value.unreadCount = sSession.unreadCount[key];
+		value.unreadCount = sSession.unreadCount[key] || 0;
+		value.date = value.date ? value.date.getTime() : 0;
 		sessionList.push(value);
 	});
 
 	_.each(gSession.session,function(value,key){
 		value.id = key;
 		value.isGroup = true;
-		value.unreadCount = gSession.unreadCount[key];
+		value.unreadCount = gSession.unreadCount[key] || 0;
+		value.date = value.date ? value.date.getTime() : 0;
 		sessionList.push(value);
 	});
 
