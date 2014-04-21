@@ -34,11 +34,11 @@ exports.signUp = function (user, cb) {
 		return;
 	}
 
-    User.findOne({loginName: user.loginName}, 'loginName', function (err, loginName) {
+    User.findOne({$or : [{loginName: user.loginName},{refId : user.refId}]}, function (err, muser) {
         if(err){
 	        cb(err);
-        }else if (loginName) {
-	        cb(new BaseError('loginName conflict'));
+        }else if (muser) {
+	        cb(new BaseError('loginName ,refId conflict'));
         } else {
             saveUser(user,cb);
         }
@@ -141,8 +141,10 @@ exports.editUser = function (user, cb) {
         queryData.id = user.id;
     } else if (user.loginName) {
         queryData.loginName = user.loginName;
-    } else {
-        cb(new BaseError('user must have id or loginName'));
+    } else if(user.refId){
+        queryData.refId = user.refId;
+    } else{
+        cb(new BaseError('user must have id or loginName or refId'));
         return;
     }
 
@@ -152,6 +154,11 @@ exports.editUser = function (user, cb) {
             return;
         }
 
+	    if(user.pwd){
+		    var md5 = crypto.createHash('md5');
+		    md5.update(user.pwd);
+		    user.pwd = md5.digest('hex');
+	    }
         if (user.nickName) {
             data.nickName = user.nickName;
             data.letterName = letter(user.nickName);
