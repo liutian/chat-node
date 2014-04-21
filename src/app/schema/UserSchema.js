@@ -6,7 +6,7 @@ var UserSchema = new Schema({
     loginName : {type : String,required : true},
     nickName : String,
     pwd : {type : String,required : true},
-    profilePhoto : {type : String,required : true},
+    profilePhoto : {type : String},
     sex : {
         type : String,
         enum : ['w','m'],
