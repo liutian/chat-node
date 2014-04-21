@@ -16,7 +16,7 @@ exports.send = function (smessage, cb) {
 	        _send(err,user,smessage,cb);
 		});
 	}else{
-		User.find({refId : smessage.toRefId},function(err,user){
+		User.findOne({refId : smessage.toRefId},function(err,user){
 			_send(err,user,smessage,cb);
 		});
     }
@@ -28,7 +28,8 @@ exports.getMessage = function(id,cb){
 
 exports.findMessage = function(params,cb){
 	if(params.id){
-		findMessageCallBack(params.id,params,cb);
+		var sessionId = util.createSessionId(params.currUserId,params.id);
+		findMessageCallBack(null,sessionId,params,cb);
 	}else if(params.refId){
 		User.findOne({refId : params.refId},function(err,user){
 			if(err){
@@ -36,14 +37,20 @@ exports.findMessage = function(params,cb){
 			}else if(!user){
 			 	cb(new BaseError('this user not exists'));
 			}else{
-				findMessageCallBack(err,user.id,params,cb);
+				var sessionId = util.createSessionId(params.currUserId,user.id);
+				findMessageCallBack(err,sessionId,params,cb);
 			}
 		});
 	}
 
 }
 
-function findMessageCallBack(sessionId,params,cb){
+function findMessageCallBack(err,sessionId,params,cb){
+	if(err){
+		cb(err);
+		return;
+	}
+
 	var query = {sessionId : sessionId};
 	if(params.startDate){
 		query.createDate = {$lte : params.startDate};
