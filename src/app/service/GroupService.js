@@ -113,6 +113,10 @@ function createValidate(group, cb) {
         cb(new BaseError('need orgId'));
         return false;
     }
+	if(!group.refId){
+		cb(new BaseError('need refId'));
+		return false;
+	}
     if (!group.name) {
         cb(new BaseError('need group name'));
         return false;
