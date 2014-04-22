@@ -1,7 +1,8 @@
 var gmessageService = require('../service/GMessageService'),
 	log4js = require('log4js'),
 	JPush = require('jpush-sdk'),
-	_ = require('underscore');
+	_ = require('underscore'),
+	moment = require('moment');
 
 var logger = log4js.getLogger();
 var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: global.prop.jpush.masterSecret});
@@ -41,13 +42,15 @@ module.exports = function(app){
 	});
 
 	app.post('/api/findGMessage',function(req,res){
-		if((!req.body.refId && !req.body.id) || !req.body.startDate || !req.body.pageNum){
+		if((!req.body.refId && !req.body.id) || !req.body.orgId){
 			res.json({code : 10001,msg : 'missing parameters'});
 			return;
 		}
 
+		var pageNum = !req.body.pageNum ? 1 : req.body.pageNum;
+
 		var limit = 10;
-		var skip = (req.body.pageNum - 1) * limit;
+		var skip = (pageNum - 1) * limit;
 
 		var params = {
 			startDate : req.body.startDate,
@@ -55,7 +58,8 @@ module.exports = function(app){
 			limit : limit,
 			refId : req.body.refId,
 			id : req.body.id,
-			orgId : req.body.orgId
+			orgId : req.body.orgId,
+			currUserId : req.session.user.id
 		}
 		gmessageService.findMessage(params,function(err,messages){
 			if(err){
@@ -68,7 +72,7 @@ module.exports = function(app){
 			_.each(messages,function(message){
 				warpMessages.unshift(convertMessage(message));
 			});
-			res.json(messages);
+			res.json(warpMessages);
 		});
 	});
 
@@ -140,16 +144,20 @@ function mobilePush(mGMessage,toGroup){
 }
 
 function convertMessage(message){
-	message.fromUserId = message.from.refId;
-	message.fromUserName = message.from.nickName;
-	message.fromUserPhoto = message.from.profilePhoto;
-	if(message.type == 1){
-		message.filePathUri = message.filePath[0];
-		message.filePathMidUri = message.filePath[1];
-	}else if(message.type == 2){
-		message.filePathUri = message.filePath[0];
-	}
-	message.createDateFmt = moment(message.createDate).format('YYYY-MM-dd HH:mm:ss');
+	var newMessage = message.toObject();
 
-	return message;
+	newMessage.id = message.id;
+	newMessage.fromUserId = message.from.refId;
+	newMessage.fromUserName = message.from.nickName;
+	newMessage.fromUserPhoto = message.from.profilePhoto;
+	if(message.type == 1){
+		newMessage.filePathUri = message.filePath[0];
+		newMessage.filePathMidUri = message.filePath[1];
+	}else if(message.type == 2){
+		newMessage.filePathUri = message.filePath[0];
+	}
+	newMessage.createDate = message.createDate ? message.createDate.getTime() : 0;
+	newMessage.createDateFmt = moment(message.createDate).format('YYYY-MM-DD HH:mm:ss');
+
+	return newMessage;
 }
