@@ -8,12 +8,11 @@ describe('用户相关的接口', function () {
 
     it.skip('注册用户', function (done) {
         userService.signUp({
-            loginName: '1liuss111@lang.com',
-            nickName : '北方的狼',
-            profilePhoto: 'wqyg.jpg',
-            orgId : 2222,
+            loginName: 'fyn',
+            nickName : '冯娜娜',
+            orgId : 1,
             pwd: '123456',
-	        refId : 32
+	        refId : 22
         }, done);
     });
 

@@ -9,9 +9,10 @@ describe('群相关的接口', function () {
 
     it.skip('创建群', function (done) {
         groupService.create({
-            name : '微企客服555',
-            founder : '5317226274dffeb41c9ba303',
-            orgId : 1111
+            name : '群聊',
+	        founderRefId : 4,
+            orgId : 1,
+	        refId : 107
         }, done);
     });
 
@@ -20,7 +21,7 @@ describe('群相关的接口', function () {
     });
 
     it.skip('加入群',function(done){
-        groupService.join('534b913a58d966a81afdfeb2','53172a2efb759cc41577d93e',done);
+        groupService.join('5355e0930c52f24804afa635','5355df95276a82241aa39963',done);
     });
 
     it.skip('退出群',function(done){
