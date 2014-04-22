@@ -22,8 +22,18 @@ exports.send = function (smessage, cb) {
     }
 }
 
-exports.getMessage = function(id,cb){
-	SMessage.findById(id,cb);
+exports.getMessage = function(id,currUserId,cb){
+	SMessage.findById(id,function(err,message){
+		if(err){
+			cb(err);
+		}else if(!message){
+			cb(new BaseError('this message not exists'));
+		}else if(message.to != currUserId && message.from != currUserId){
+			cb(new BaseError('have no right'));
+		}else{
+			cb(null,message);
+		}
+	});
 }
 
 exports.findMessage = function(params,cb){

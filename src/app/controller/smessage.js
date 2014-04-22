@@ -30,19 +30,10 @@ module.exports = function(app){
 	});
 
 	app.get('/api/smessage/:id',function(req,res){
-		smessageService.getMessage(req.params.id,function(err,message){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-				return;
-			}
+		var currUser = req.session.user;
 
-			var currUser = req.session.user;
-			if(message.to != currUser.id && message.from != currUser.id){
-				res.json({code : 10001,msg : 'have no right'});
-			}else{
-				res.json(message);
-			}
+		smessageService.getMessage(req.params.id,currUser.id,function(err,message){
+			ctrlUtil.processToData(message,res,err,logger);
 		});
 	});
 
