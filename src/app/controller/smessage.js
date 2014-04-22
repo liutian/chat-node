@@ -161,7 +161,7 @@ function convertMessage(message){
 		newMessage.filePathUri = message.filePath[0];
 	}
 	newMessage.createDate = message.createDate ? message.createDate.getTime() : 0;
-	newMessage.createDateFmt = moment(message.createDate).format('YYYY-MM-dd HH:mm:ss');
+	newMessage.createDateFmt = moment(message.createDate).format('YYYY-MM-DD HH:mm:ss');
 
 	return newMessage;
 }
