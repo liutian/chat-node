@@ -9,7 +9,7 @@ var GMessageSchema = new Schema({
     from: {type: Schema.Types.ObjectId, ref: 'user',required : true},
     to: {type: Schema.Types.ObjectId, ref: 'group',required : true},
     createDate : {type : Date,default : Date.now},
-    orgId : {type : Number,required : true},
+    orgId : Schema.Types.Mixed,
 	type : {type : Number,enum : [0,1,2],default : 0},
 	filePath : [String],
 	fileName : String

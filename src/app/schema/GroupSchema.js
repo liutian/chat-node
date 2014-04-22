@@ -2,15 +2,15 @@ var mongoose = require('mongoose')
   , Schema = mongoose.Schema;
 
 var GroupSchema = new Schema({
-	refId : {type : Number,required : true},
-	profilePhoto : {type : String},
+	refId : Schema.Types.Mixed,
+	profilePhoto : String,
     name : {type : String,required : true},
     letterName : {type : String,required: true,lowercase:true},
-    founder : {type : Schema.Types.ObjectId,ref : 'user',require : true},
-	founderRefId : {type : Number,required : true},
+    founder : {type : Schema.Types.ObjectId,ref : 'user',required : true},
+	founderRefId : Schema.Types.Mixed,
     members : [{type : Schema.Types.ObjectId ,ref : 'user'}],
     createDate : {type : Date , default : Date.now},
-    orgId : {type : Number ,required : true}
+    orgId : Schema.Types.Mixed
 });
 
 mongoose.model('group', GroupSchema);
