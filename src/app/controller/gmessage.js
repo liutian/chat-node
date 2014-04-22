@@ -2,11 +2,16 @@ var gmessageService = require('../service/GMessageService'),
 	log4js = require('log4js'),
 	_ = require('underscore'),
 	moment = require('moment'),
-	jpushWrap = require('../common/jpushWrap');
+	jpushWrap = require('../common/jpushWrap'),
+	ctrlUtil = require('../common/ControllerUtil');
 
 var logger = log4js.getLogger();
 
 module.exports = function(app){
+	/**
+	 *  filePath,fileName,type,content,to
+	 * req.body
+	 */
 	app.post('/api/gmessage',function(req,res){
 		var gmessage = {
 			toRefId : req.body.toTeamId,
@@ -14,12 +19,10 @@ module.exports = function(app){
 			fromRefId : req.session.user.refId,
 			fromNickName : req.session.user.nickName,
 			fromProfilePhoto : req.session.user.profilePhoto,
-			orgId : req.session.user.orgId,
-			content : req.body.content,
-			type : req.body.type,
-			filePath : req.body.filePath,
-			fileName : req.body.fileName
+			orgId : req.session.user.orgId
 		}
+
+		var postData = _.extend(req.body,gmessage);
 
 		gmessageService.send(gmessage,function(err,mGMessage,toGroup){
 			sendCallBack(err,mGMessage,toGroup,res,req);
@@ -29,23 +32,17 @@ module.exports = function(app){
 	app.get('/api/gmessage/:id',function(req,res){
 		var currUser = req.session.user;
 		gmessageService.getMessage(req.params.id,currUser.id,function(err,message){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-				return;
-			}
-
-			res.json(message);
+			ctrlUtil.processToData(message,res,err,logger);
 		});
 	});
 
 	app.post('/api/findGMessage',function(req,res){
-		if((!req.body.refId && !req.body.id) || !req.body.orgId){
+		if((!req.body.refId && !req.body.id) || (!req.body.id && !req.body.orgId)){
 			res.json({code : 10001,msg : 'missing parameters'});
 			return;
 		}
 
-		var pageNum = !req.body.pageNum ? 1 : req.body.pageNum;
+		var pageNum = req.body.pageNum || 1;
 
 		var limit = 10;
 		var skip = (pageNum - 1) * limit;
@@ -75,15 +72,20 @@ module.exports = function(app){
 	});
 
 	app.post('/api/gHistorySessionClearZero',function(req,res){
-		gmessageService.historySessionClearZeroRefId(req.session.user.id,req.body.id,function(err){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-				return;
-			}else{
-				res.json({code : 10000});
-			}
-		});
+		if(!req.body.id && !req.body.refId){
+			req.json({code : 10001,msg : 'need id or refId'});
+		}
+
+		var currUserId = req.session.user.id;
+		if(req.body.id){
+			gmessageService.historySessionClearZero(currUserId,req.body.id,function(err){
+				ctrlUtil.process(res,err,logger);
+			});
+		}else{
+			gmessageService.historySessionClearZeroRefId(currUserId,req.body.refId,function(err){
+				ctrlUtil.process(res,err,logger);
+			});
+		}
 	});
 }
 
@@ -94,11 +96,6 @@ function sendCallBack(err,mGMessage,toGroup,res,req){
 		return;
 	}
 
-//	mGMessage.from = {
-//		refId : req.session.user.refId,
-//		nickName : req.session.user.nickName,
-//		profilePhoto : req.session.user.profilePhoto
-//	};
 	res.json(convertMessage(mGMessage));
 
 	var fromLoginName = req.session.user.loginName;

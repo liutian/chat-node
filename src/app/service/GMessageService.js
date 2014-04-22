@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
 	, _ = require('underscore')
-	,log4js = require('log4js')
+	, log4js = require('log4js')
 	, BaseError = require('../common/BaseError.js');
 
 var logger = log4js.getLogger();
@@ -11,147 +11,155 @@ var User = mongoose.model('user');
 exports.send = function (gmessage, cb) {
 	if (!validateGMessage(gmessage, cb)) return;
 
+	var conditions = {members: gmessage.from};
 	if (gmessage.to) {
-		Group.findOne({_id : gmessage.to,orgId : gmessage.orgId,members : gmessage.from})
-			.populate({
-				path : 'members',
-				select : 'refId loginName nickName profilePhoto'
-			})
-			.exec( function (err, group) {
-			_send(err, group,gmessage, cb);
-		});
+		conditions._id = gmessage.to;
 	} else {
-		Group.findOne({refId: gmessage.toRefId, orgId: gmessage.orgId,members : gmessage.from})
-			.populate({
-				path : 'members',
-				select : 'refId loginName nickName profilePhoto'
-			})
-			.exec( function (err, group) {
-			_send(err, group,gmessage, cb);
-		});
+		conditions.refId = gmessage.toRefId;
+		conditions.orgId = gmessage.orgId;
 	}
+
+	Group.findOne(conditions)
+		.populate({
+			path: 'members',
+			select: 'refId loginName nickName profilePhoto'
+		})
+		.exec(function (err, group) {
+			if (err) {
+				cb(err);
+			} else if (!group) {
+				cb(new BaseError('this group not exists or you have no right id:%s', gmessage.to || gmessage.toRefId));
+			} else {
+				_send(group, gmessage, cb);
+			}
+		});
 }
 
-exports.getMessage = function(id,currUserId,cb){
-	GMessage.findById(id,function(err,message){
-		if(err){
+exports.getMessage = function (id, currUserId, cb) {
+	GMessage.findById(id, function (err, message) {
+		if (err) {
 			cb(err);
+			return;
+		}else if(!message){
+			cb(new BaseError('this gmessage not exists'));
 			return;
 		}
 
-		Group.find({id : message.to,members : currUserId},function(err,group){
+		Group.find({_id: message.to, members: currUserId}, function (err, group) {
 			if(err){
 				cb(err);
-				return;
-			}
-
-			if(!group){
+			}else if (!group) {
 				cb(new BaseError('have no right'));
-			}else{
-				cb(null,message);
+			} else {
+				cb(err, message);
 			}
 		})
 	});
 }
 
-exports.findMessage = function(params,cb){
-	if(params.id){
-		Group.findOne({id : params.id,members : params.currUserId},function(err,group){
-			findMessageCallBack(err,group,params,cb);
-		});
-	}else if(params.refId){
-		Group.findOne({refId : params.refId,orgId : params.orgId,members : params.currUserId},function(err,group){
-			findMessageCallBack(err,group,params,cb);
-		});
+exports.findMessage = function (params, cb) {
+	var conditions = {members: params.currUserId};
+
+	if (params.id) {
+		conditions.id = params.id;
+	} else if (params.refId) {
+		conditions.refId = params.refId;
+		conditions.orgId = params.orgId;
 	}
+
+	Group.findOne(conditions, function (err, group) {
+		findMessageCallBack(err, group, params, cb);
+	});
 }
 
-exports.historySessionClearZero = function(currUserId,targetGroupId,cb){
+exports.historySessionClearZero = function (currUserId, targetGroupId, cb) {
 	var unreadCount = {};
 	unreadCount['groupSessionUnreadCount.' + targetGroupId] = 0;
-	GMessage.findById(currUserId,{$set: unreadCount},function(err){
+	GMessage.findByIdAndUpdate(currUserId, {$set: unreadCount}, function (err) {
 		cb(err);
 	});
 }
 
-exports.historySessionClearZeroRefId = function(currUserId,refId,cb){
-	Group.find({refId : refId},function(err,group){
-		if(group){
-			exports.historySessionClearZero(currUserId,group.id,cb);
-		}else{
+exports.historySessionClearZeroRefId = function (currUserId, refId, cb) {
+	Group.findOne({refId: refId}, function (err, group) {
+		if(err){
 			cb(err);
+		}else if(!group){
+			cb(new BaseError('group not exists refId:%s',refId));
+		}else{
+			exports.historySessionClearZero(currUserId, group.id, cb);
 		}
 	});
 }
 
-function _send(err, group,gmessage, cb) {
-	if (err) {
-		cb(err);
-	} else if (!group) {
-		cb(new BaseError('this group not exists or you have no right id:%s', gmessage.to || gmessage.toRefId));
-	} else {
-		gmessage.to = group.id;
-		gmessage.contentText = gmessage.content;
+function _send(group, gmessage, cb) {
+	gmessage.to = group.id;
+	gmessage.contentText = gmessage.content;
 
-		if(gmessage.type == 1){
-			gmessage.content = '<a href="'+ gmessage.filePath[0] +'"><img src="'+ gmessage.filePath[1] +'"></a>';
-			gmessage.contentText = '[图片]' + gmessage.fileName;
-		}else if(gmessage.type == 2){
-			gmessage.content = '<a href="'+ gmessage.filePath[0] +'">'+ gmessage.fileName +'</a>';
-			gmessage.contentText = '[文件]' + gmessage.fileName;
-		}else{
-			gmessage.type = 0;
+	if (gmessage.type == 1) {
+		gmessage.content = '<a href="' + gmessage.filePath[0] + '"><img src="' + gmessage.filePath[1] + '"></a>';
+		gmessage.contentText = '[图片]' + gmessage.fileName;
+	} else if (gmessage.type == 2) {
+		gmessage.content = '<a href="' + gmessage.filePath[0] + '">' + gmessage.fileName + '</a>';
+		gmessage.contentText = '[文件]' + gmessage.fileName;
+	} else {
+		gmessage.type = 0;
+	}
+
+	var mGMessage = new GMessage(gmessage);
+	mGMessage.save(function (err) {
+		if (!err) {
+			saveHistorySession(mGMessage, gmessage, group);
 		}
 
-		var mGMessage = new GMessage(gmessage);
-		mGMessage.save(function(err){
-			if(!err){
-				saveHistorySession(mGMessage,gmessage,group);
-			}
-
-			cb(err,mGMessage,group);
-		});
-	}
+		cb(err, mGMessage, group);
+	});
 }
 
 
-function saveHistorySession(mGMessage,gmessage,group){
+function saveHistorySession(mGMessage, gmessage, group) {
 	var _session = {
-		from : mGMessage.from,
-		fromRefId : gmessage.fromRefId,
-		fromProfilePhoto : gmessage.fromProfilePhoto,
-		to : mGMessage.to,
-		toRefId : group.refId,
-		toProfilePhoto : group.profilePhoto,
-		type : mGMessage.type,
-		fromNickName : gmessage.fromNickName,
-		toNickName : group.name,
-		date : mGMessage.createDate,
-		contentText : mGMessage.contentText.substr(0,20)
+		from: gmessage.from,
+		fromRefId: gmessage.fromRefId,
+		fromNickName: gmessage.fromNickName,
+		fromProfilePhoto: gmessage.fromProfilePhoto,
+		to: group.id,
+		toRefId: group.refId,
+		toNickName: group.name,
+		toProfilePhoto: group.profilePhoto,
+		type: mGMessage.type,
+		date: mGMessage.createDate,
+		contentText: mGMessage.contentText.substr(0, 20)
 	}
 
 	var toSession = {};
 	toSession['groupSession.' + group.id] = _session;
 	var toSessionUnreadCount = {};
 	toSessionUnreadCount['groupSessionUnreadCount.' + group.id] = 1;
-	for(var i = 0;i < group.members.length;i++){
-		var toUserId = group.members[i];
-		User.findByIdAndUpdate(toUserId,{$set : toSession,$inc : toSessionUnreadCount},function(err){
-			if(err) logger.error(err);
+	for (var i = 0; i < group.members.length; i++) {
+		var toUserId = group.members[i].id;
+		if(toUserId == gmessage.from) continue;
+
+		User.findByIdAndUpdate(toUserId, {$set: toSession, $inc: toSessionUnreadCount}, function (err) {
+			if (err) logger.error(err);
 		});
 	}
 
 	var fromSession = {};
 	fromSession['groupSession.' + group.id] = _session;
-	User.findByIdAndUpdate(gmessage.from,{$set : fromSession},function(err){
-		if(err) logger.error(err);
+	User.findByIdAndUpdate(gmessage.from, {$set: fromSession}, function (err) {
+		if (err) logger.error(err);
 	});
 }
 
 function validateGMessage(gmessage, cb) {
 	if (gmessage.type != 1 && gmessage.type != 2
-		&& (!gmessage.content || gmessage.content.length == 0)) {
+		&& !gmessage.content) {
 		cb(new BaseError('gmessage need content'));
+		return false;
+	}
+	if (gmessage.type == 1 && gmessage.type == 2 && _.isArray(gmessage.filePath)) {
+		cb(new BaseError('need filePath'));
 		return false;
 	}
 	if (!gmessage.from) {
@@ -162,7 +170,7 @@ function validateGMessage(gmessage, cb) {
 		cb(new BaseError('gmessage need to or toRefId'));
 		return false;
 	}
-	if (!gmessage.orgId) {
+	if (!gmessage.to && !gmessage.orgId) {
 		cb(new BaseError('gmessage need orgId'));
 		return false;
 	}
@@ -170,24 +178,24 @@ function validateGMessage(gmessage, cb) {
 }
 
 
-function findMessageCallBack(err,group,params,cb){
-	if(err){
+function findMessageCallBack(err, group, params, cb) {
+	if (err) {
 		cb(err);
-	}else if(!group){
+	} else if (!group) {
 		cb(new BaseError('this group not exists or you have no right'));
-	}else{
-		var query = {to : group.id};
-		if(params.startDate){
-			query.createDate = {$lte : params.startDate};
+	} else {
+		var query = {to: group.id};
+		if (params.startDate) {
+			query.createDate = {$lte: params.startDate};
 		}
 		GMessage.find(query)
 			.populate({
-				path : 'from',
-				select : 'refId loginName nickName profilePhoto'
+				path: 'from',
+				select: 'refId loginName nickName profilePhoto'
 			})
 			.sort('-createDate').skip(params.skip).limit(params.limit)
-			.exec(function(err,messages){
-				cb(err,messages);
+			.exec(function (err, messages) {
+				cb(err, messages);
 			});
 	}
 }
