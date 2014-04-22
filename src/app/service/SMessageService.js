@@ -64,11 +64,11 @@ exports.historySessionClearZero = function(currUserId,targetUserId,cb){
 }
 
 exports.historySessionClearZeroRefId = function(currUserId,refId,cb){
-	User.find({refId : refId},function(err,user){
+	User.findOne({refId : refId},function(err,user){
 		if(err){
 			cb(err);
 		}else if(!user){
-			cb(new BaseError('currUser not exists refId:%s',refId));
+			cb(new BaseError('user not exists refId:%s',refId));
 		}else{
 			exports.historySessionClearZero(currUserId,user.id,cb);
 		}
