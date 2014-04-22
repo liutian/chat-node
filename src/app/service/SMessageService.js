@@ -29,7 +29,7 @@ exports.getMessage = function(id,cb){
 exports.findMessage = function(params,cb){
 	if(params.id){
 		var sessionId = util.createSessionId(params.currUserId,params.id);
-		findMessageCallBack(null,sessionId,params,cb);
+		findMessageCallBack(sessionId,params,cb);
 	}else if(params.refId){
 		User.findOne({refId : params.refId},function(err,user){
 			if(err){
@@ -38,19 +38,34 @@ exports.findMessage = function(params,cb){
 			 	cb(new BaseError('this user not exists'));
 			}else{
 				var sessionId = util.createSessionId(params.currUserId,user.id);
-				findMessageCallBack(err,sessionId,params,cb);
+				findMessageCallBack(sessionId,params,cb);
 			}
 		});
 	}
 
 }
 
-function findMessageCallBack(err,sessionId,params,cb){
-	if(err){
+exports.historySessionClearZero = function(currUserId,targetUserId,cb){
+	var unreadCount = {};
+	unreadCount['whisperSessionUnreadCount.' + targetUserId] = 0;
+	SMessage.findByIdAndUpdate(currUserId,{$set: unreadCount},function(err){
 		cb(err);
-		return;
-	}
+	});
+}
 
+exports.historySessionClearZeroRefId = function(currUserId,refId,cb){
+	User.find({refId : refId},function(err,user){
+		if(err){
+			cb(err);
+		}else if(!user){
+			cb(new BaseError('currUser not exists refId:%s',refId));
+		}else{
+			exports.historySessionClearZero(currUserId,user.id,cb);
+		}
+	});
+}
+
+function findMessageCallBack(sessionId,params,cb){
 	var query = {sessionId : sessionId};
 	if(params.startDate){
 		query.createDate = {$lte : params.startDate};
@@ -64,31 +79,16 @@ function findMessageCallBack(err,sessionId,params,cb){
 		.exec(cb);
 }
 
-exports.historySessionClearZero = function(currUserId,targetUserId,cb){
-	var unreadCount = {};
-	unreadCount['whisperSessionUnreadCount.' + targetUserId] = 0;
-	SMessage.findById(currUserId,{$set: unreadCount},function(err){
-		cb(err);
-	});
-}
-
-exports.historySessionClearZeroRefId = function(currUserId,refId,cb){
-	User.find({refId : refId},function(err,user){
-		if(user){
-			exports.historySessionClearZero(currUserId,user.id,cb);
-		}else{
-			cb(err);
-		}
-	});
-}
-
-
 function validateSMessage(smessage, cb) {
     if (smessage.type != 1 && smessage.type != 2
-	    && (!smessage.content || smessage.content.length == 0)) {
+	    && !smessage.content) {
         cb(new BaseError('smessage need content '));
         return false;
     }
+	if(smessage.type == 1 && smessage.type == 2 && _.isArray(smessage.filePath)){
+		cb(new BaseError('need filePath'));
+		return false;
+	}
     if (!smessage.from) {
         cb(new BaseError('smessage need from'));
         return false;
@@ -97,12 +97,8 @@ function validateSMessage(smessage, cb) {
         cb(new BaseError('smessage need to or toRefId'));
         return false;
     }
-    if (smessage.from == smessage.to) {
+    if (!smessage.toRefId && smessage.from == smessage.to) {
         cb(new BaseError('smessage from and to must diff'));
-        return false;
-    }
-    if (!smessage.orgId) {
-        cb(new BaseError('smessage need orgId'));
         return false;
     }
     return true;
@@ -141,15 +137,15 @@ function _send (err,toUser,smessage,cb){
 
 function saveHistorySession(mSMessage,smessage,toUser){
 	var _session = {
-		from : mSMessage.from,
+		from : smessage.from,
 		fromRefId : smessage.fromRefId,
 		fromProfilePhoto : smessage.fromProfilePhoto,
-		to : mSMessage.to,
+		fromNickName : smessage.fromNickName,
+		to : toUser.id,
 		toRefId : toUser.refId,
 		toProfilePhoto : toUser.profilePhoto,
-		type : mSMessage.type,
-		fromNickName : smessage.fromNickName,
 		toNickName : toUser.nickName,
+		type : mSMessage.type,
 		date : mSMessage.createDate,
 		contentText : mSMessage.contentText.substr(0,20)
 	}

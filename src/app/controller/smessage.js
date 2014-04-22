@@ -2,11 +2,16 @@ var smessageService = require('../service/SMessageService'),
 	log4js = require('log4js'),
 	moment = require('moment'),
 	_ = require('underscore'),
-	jpushWrap = require('../common/jpushWrap');
+	jpushWrap = require('../common/jpushWrap'),
+	ctrlUtil = require('../common/ControllerUtil');
 
 var logger = log4js.getLogger();
 
 module.exports = function(app){
+	/**
+	 *  filePath,fileName,type,content,to
+	 * @param req.body
+	 */
 	app.post('/api/smessage',function(req,res){
 		var smessage = {
 			toRefId : req.body.toUserId,
@@ -14,14 +19,12 @@ module.exports = function(app){
 			fromRefId : req.session.user.refId,
 			fromNickName : req.session.user.nickName,
 			fromProfilePhoto : req.session.user.profilePhoto,
-			orgId : req.session.user.orgId,
-			content : req.body.content,
-			type : req.body.type,
-			filePath : req.body.filePath,
-			fileName : req.body.fileName
+			orgId : req.session.user.orgId
 		}
 
-		smessageService.send(smessage,function(err,mSMessage,toUser){
+		var postData = _.extend(req.body,smessage);
+
+		smessageService.send(postData,function(err,mSMessage,toUser){
 			sendCallBack(err,mSMessage,toUser,res,req);
 		});
 	});
@@ -44,13 +47,13 @@ module.exports = function(app){
 	});
 
 	app.post('/api/findSMessage',function(req,res){
-		if((!req.body.refId && !req.body.id) || !req.body.pageNum){
-			res.json({code : 10001,msg : 'missing parameters'});
+		if(!req.body.refId && !req.body.id){
+			res.json({code : 10001,msg : 'need refId or id'});
 			return;
 		}
 
-		var limit = 10;
-		var skip = (req.body.pageNum - 1) * limit;
+		var limit = 10,pageNum = req.body.pageNum || 1;
+		var skip = pageNum * limit;
 
 		var params = {
 			startDate : req.body.startDate,
@@ -76,15 +79,20 @@ module.exports = function(app){
 	});
 
 	app.post('/api/sHistorySessionClearZero',function(req,res){
-		smessageService.historySessionClearZeroRefId(req.session.user.id,req.body.id,function(err){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-				return;
-			}else{
-				res.json({code : 10000});
-			}
-		});
+		if(!req.body.id && !req.body.refId){
+			req.json({code : 10001,msg : 'need id or refId'});
+		}
+
+		var currUserId = req.session.user.id;
+		if(req.body.id){
+			smessageService.historySessionClearZero(currUserId,req.body.id,function(err){
+				ctrlUtil.process(res,err,logger);
+			});
+		}else{
+			smessageService.historySessionClearZeroRefId(currUserId,req.body.refId,function(err){
+				ctrlUtil.process(res,err,logger);
+			});
+		}
 	});
 }
 
@@ -94,18 +102,6 @@ function sendCallBack(err,mSMessage,toUser,res,req){
 		res.json({code : 10001,msg : err.message});
 		return;
 	}
-
-//	mSMessage.from = {
-//		refId : req.session.user.refId,
-//		nickName : req.session.user.nickName,
-//		profilePhoto : req.session.user.profilePhoto
-//	};
-//	mSMessage.to = {
-//		refId : toUser.refId,
-//		nickName : toUser.nickName,
-//		profilePhoto : toUser.profilePhoto,
-//		loginName : toUser.loginName
-//	}
 
 	res.json(convertMessage(mSMessage));
 
