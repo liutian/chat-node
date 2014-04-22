@@ -1,19 +1,28 @@
 var userService = require('../../app/service/UserService.js'),
 	BaseError = require('../common/BaseError'),
-	log4js = require('log4js');
+	log4js = require('log4js'),
+	ctrlUtil = require('../common/ControllerUtil');
 
 var logger = log4js.getLogger();
 
 module.exports = function(app){
 
-	app.post('/signUp',function(req,res){
+	app.post('/api-signUp',function(req,res){
+		var orgId = req.body.orgId;
+		var refId = req.body.refId;
+
+		if (!orgId) {
+			req.json({code : 10001,msg : 'need orgId'});
+			return;
+		}
+
+		if (!refId) {
+			req.json({code : 10001,msg : 'need refId'});
+			return;
+		}
+
 		userService.signUp(req.body,function(err){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-			}else{
-				res.json({code : 10000});
-			}
+			ctrlUtil.process(res,err,logger);
 		});
 	});
 
@@ -41,7 +50,7 @@ module.exports = function(app){
 		});
 	});
 
-	app.post('/editUser',function(req,res){
+	app.post('/api-editUser',function(req,res){
 		userService.editUser(req.body,function(err){
 			if(err){
 				logger.error(err);

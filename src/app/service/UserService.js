@@ -24,21 +24,18 @@ var User = mongoose.model('user');
 exports.signUp = function (user, cb) {
     if (!userValid(user, cb)) return;
 
-	if (!user.orgId) {
-		cb(new BaseError('need orgId'));
-		return;
+	var conditions = {};
+	if(user.refId){
+		conditions.$or = [{loginName: user.loginName},{refId : user.refId}];
+	}else{
+		conditions.loginName = user.loginName;
 	}
 
-	if (!user.refId) {
-		cb(new BaseError('need refId'));
-		return;
-	}
-
-    User.findOne({$or : [{loginName: user.loginName},{refId : user.refId}]}, function (err, muser) {
+    User.findOne(conditions, function (err, muser) {
         if(err){
 	        cb(err);
         }else if (muser) {
-	        cb(new BaseError('loginName ,refId conflict'));
+	        cb(new BaseError('loginName or refId conflict'));
         } else {
             saveUser(user,cb);
         }
@@ -86,39 +83,63 @@ exports.signIn = function (user, cb) {
 
 exports.getSHistorySession = function(userId,cb){
 	User.findById(userId,function(err,user){
+		if(err){
+			cb(err);
+			return;
+		}else if(!user){
+			cb(new BaseError('this user not exists'));
+			return;
+		}
+
 		var historySession = {
 			session : user.whisperSession || {},
 			unreadCount : user.whisperSessionUnreadCount || {}
 		};
 
-		cb(err,historySession);
+		cb(null,wrapSession(historySession,null));
 	});
 }
 
 exports.getGHistorySession = function(userId,cb){
 	User.findById(userId,function(err,user){
+		if(err){
+			cb(err);
+			return;
+		}else if(!user){
+			cb(new BaseError('this user not exists'));
+			return;
+		}
+
 		var historySession = {
 			session : user.groupSession || {},
 			unreadCount : user.groupSessionUnreadCount || {}
 		};
 
-		cb(err,historySession);
+		cb(null,wrapSession(null,historySession));
 	});
 }
 
 exports.getAllHistorySession = function(userId,cb){
-	exports.getSHistorySession(userId,function(err,sSession){
-		if(!err){
-			exports.getGHistorySession(userId,function(err,gSession){
-				if(!err){
-					cb(null,wrapSession(sSession,gSession));
-				}else{
-					cb(err);
-				}
-			});
-		}else{
+	User.findById(userId,function(err,user){
+		if(err){
 			cb(err);
+			return;
+		}else if(!user){
+			cb(new BaseError('this user not exists'));
+			return;
 		}
+
+		var gSession = {
+			session : user.groupSession || {},
+			unreadCount : user.groupSessionUnreadCount || {}
+		};
+
+		var sSession = {
+			session : user.whisperSession || {},
+			unreadCount : user.whisperSessionUnreadCount || {}
+		};
+
+		cb(null,wrapSession(sSession,gSession));
 	});
 }
 
@@ -136,19 +157,19 @@ exports.getAllHistorySession = function(userId,cb){
  * @param cb
  */
 exports.editUser = function (user, cb) {
-    var queryData = {};
+    var conditions = {};
     if (user.id) {
-        queryData.id = user.id;
+	    conditions.id = user.id;
     } else if (user.loginName) {
-        queryData.loginName = user.loginName;
+	    conditions.loginName = user.loginName;
     } else if(user.refId){
-        queryData.refId = user.refId;
+	    conditions.refId = user.refId;
     } else{
         cb(new BaseError('user must have id or loginName or refId'));
         return;
     }
 
-    User.findOne(queryData,function(err,data){
+    User.findOne(conditions,function(err,data){
         if(!data){
             cb(new BaseError('not find user'));
             return;
@@ -227,21 +248,26 @@ function saveUser(user,cb) {
 
 function wrapSession(sSession,gSession){
 	var sessionList = [];
-	_.each(sSession.session,function(value,key){
-		value.id = key;
-		value.isGroup = false;
-		value.unreadCount = sSession.unreadCount[key] || 0;
-		value.date = value.date ? value.date.getTime() : 0;
-		sessionList.push(value);
-	});
 
-	_.each(gSession.session,function(value,key){
-		value.id = key;
-		value.isGroup = true;
-		value.unreadCount = gSession.unreadCount[key] || 0;
-		value.date = value.date ? value.date.getTime() : 0;
-		sessionList.push(value);
-	});
+	if(_.isArray(sSession)){
+		_.each(sSession.session,function(value,key){
+			value.id = key;
+			value.isGroup = false;
+			value.unreadCount = sSession.unreadCount[key] || 0;
+			value.date = value.date ? value.date.getTime() : 0;
+			sessionList.push(value);
+		});
+	}
+
+	if(_.isArray(gSession)){
+		_.each(gSession.session,function(value,key){
+			value.id = key;
+			value.isGroup = true;
+			value.unreadCount = gSession.unreadCount[key] || 0;
+			value.date = value.date ? value.date.getTime() : 0;
+			sessionList.push(value);
+		});
+	}
 
 	sessionList.sort(function(a,b){
 		return a.createDate > b.createDate ? 1 : -1;
