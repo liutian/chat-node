@@ -6,5 +6,8 @@
 		"extrasGroupType" : 5,
 		"appkey" : "c50b36a83754f7d8ec0d46ec",
 		"masterSecret" : "24b59200af22fa1ad10ff662"
-	}
+	},
+	"trustIP" : [
+		"127.0.0.1"
+	]
 }

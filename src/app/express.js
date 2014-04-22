@@ -57,6 +57,24 @@ app.use('/api',function(req,res,next){
 	}
 });
 
+app.user('/trust-api',function(req,res,next){
+ 	var trust = false,trustIP = global.prop.trustIP;
+
+	for(var i = 0;i < trustIP.length;i++){
+		if(req.ip == ip){
+			trust = true;
+			break;
+		}
+	}
+
+	if(trust){
+		next();
+	}else{
+		res.statusCode = 401;
+		res.json({code : 9999,msg : 'you can not trust'});
+	}
+});
+
 app.use(app.router);
 
 // development only
