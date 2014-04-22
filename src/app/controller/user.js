@@ -7,7 +7,10 @@ var logger = log4js.getLogger();
 
 module.exports = function(app){
 
-	app.post('/api-signUp',function(req,res){
+	/**
+	 * refId,orgId,loginName,pwd,nickName,profilePhoto,sex
+	 */
+	app.post('/trust-api/signUp',function(req,res){
 		var orgId = req.body.orgId;
 		var refId = req.body.refId;
 
@@ -41,28 +44,24 @@ module.exports = function(app){
 
 	app.get('/api/historySession',function(req,res){
 		userService.getAllHistorySession(req.session.user.id,function(err,sessions){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-			}else{
-				res.json(sessions);
-			}
+			ctrlUtil.processToData(sessions,res,err,logger);
 		});
 	});
 
-	app.post('/api-editUser',function(req,res){
+	/**
+	 *  refId,orgId,loginName,pwd,nickName,profilePhoto,sex
+	 */
+	app.post('/trust-api/editUser',function(req,res){
+		var refId = req.body.refId;
+
+		if (!refId) {
+			req.json({code : 10001,msg : 'need refId'});
+			return;
+		}
+
 		userService.editUser(req.body,function(err){
-			if(err){
-				logger.error(err);
-				res.json({code : 10001,msg : err.message});
-			}else{
-				res.json({code : 10000});
-			}
+			ctrlUtil.process(res,err,logger);
 		});
-	});
-
-	app.get('/api/user',function(req,res){
-		res.json([{name : 'sd',age : 1},{name : 'ffd',age : 34}]);
 	});
 
 }

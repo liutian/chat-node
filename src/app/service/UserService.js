@@ -191,9 +191,7 @@ exports.editUser = function (user, cb) {
             data.sex = user.sex;
         }
 
-        data.save(function(err){
-            cb(err);
-        });
+        data.save(cb);
     });
 }
 
