@@ -39,6 +39,7 @@ function createCallBack(err,user,group,cb){
 	} else if (!user) {
 		cb(new BaseError('this user not find userId:%s', group.founder));
 	} else {
+		group.founder = user.id;
 		var mGroup = new Group(group);
 		mGroup.members.push(group.founder);
 		mGroup.letterName = letter(mGroup.name);
@@ -92,7 +93,7 @@ exports.exit = function (userId, groupId, cb) {
     });
 }
 
-exports.editGroup = function (group, cb) {
+exports.editGroup = function (userId,group, cb) {
 	if(group.id){
 		Group.findById(group.id,function(err,mgroup){
 			editGroupCallBack(err,mgroup,group,cb);
@@ -138,6 +139,10 @@ exports.findGroupsAboutUser = function(userId,cb){
 }
 
 function createValidate(group, cb) {
+	if(!group.refId){
+		cb(new BaseError('need refId'));
+		return false;
+	}
     if (!group.orgId) {
         cb(new BaseError('need orgId'));
         return false;
