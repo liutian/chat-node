@@ -1,12 +1,10 @@
 var gmessageService = require('../service/GMessageService'),
 	log4js = require('log4js'),
-	JPush = require('jpush-sdk'),
 	_ = require('underscore'),
-	moment = require('moment');
+	moment = require('moment'),
+	jpushWrap = require('../common/jpushWrap');
 
 var logger = log4js.getLogger();
-var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: global.prop.jpush.masterSecret});
-
 
 module.exports = function(app){
 	app.post('/api/gmessage',function(req,res){
@@ -96,46 +94,50 @@ function sendCallBack(err,mGMessage,toGroup,res,req){
 		return;
 	}
 
-	mGMessage.from = {
-		refId : req.session.user.refId,
-		nickName : req.session.user.nickName,
-		profilePhoto : req.session.user.profilePhoto
-	};
+//	mGMessage.from = {
+//		refId : req.session.user.refId,
+//		nickName : req.session.user.nickName,
+//		profilePhoto : req.session.user.profilePhoto
+//	};
 	res.json(convertMessage(mGMessage));
 
-	mobilePush(mGMessage,toGroup);
+	var fromLoginName = req.session.user.loginName;
+	var fromRefId = req.session.user.refId;
+	mobilePush(mGMessage,toGroup,fromLoginName,fromRefId);
 }
 
-function mobilePush(mGMessage,toGroup){
-	var content = mGMessage.contentText,extra = {};
+function mobilePush(mGMessage,toGroup,fromLoginName,fromRefId){
+	var content = {message : mGMessage.contentText,n_extras : {}};
 
 	if(mGMessage.type == 1){
-		content = '[图片]';
-		extra.path = mGMessage.filePath[1];
+		content.message = '[图片]';
+		content.n_extras.path = mGMessage.filePath[1];
 	}else if(mGMessage.type == 2){
-		content = '[文件]';
+		content.message = '[文件]';
 		if(mGMessage.fileName.length > 20){
 			var suffix = mGMessage.fileName.lastIndexOf('.' + 1);
-			extra.fn = mGMessage.fileName.substr(0,20 - suffix.length - 1) + '.' + suffix;
+			content.n_extras.fn = mGMessage.fileName.substr(0,20 - suffix.length - 1) + '.' + suffix;
 		}else{
-			extra.fn = mGMessage.fileName;
+			content.n_extras.fn = mGMessage.fileName;
 		}
-		extra.path = mGMessage.filePath[0];
+		content.n_extras.path = mGMessage.filePath[0];
 	}else if (content.length > 50){
-		content = content.substr(0,50);
-		extra.id = mGMessage.id;
+		content.message = content.message.substr(0,50);
+		content.n_extras.id = mGMessage.id;
 	}
 
-	extra.ct = mGMessage.type;
-	extra.uid = mGMessage.from.refId;
-	extra.ios = {sound : 'default'};
+	content.n_extras.ct = mGMessage.type;
+	content.n_extras.uid = fromRefId;
+	content.n_extras.ios = {sound : 'default'};
+	content.n_extras.type = global.prop.jpush.extrasGroupType;
+	content.n_extras.team = toGroup.refId;
 
+	var sendNo = global.prop.jpush.groupChatSendNo;
 	for(var i = 0;i < toGroup.members.length;i++){
 		var member = toGroup.members[i];
-		if(member.refId == mGMessage.from.refId) continue;
+		if(member.refId == fromRefId) continue;
 
-		var sendNo = global.prop.jpush.groupChatSendNo;
-		jpushClient.sendNotificationWithAlias(sendNo,member.loginName,mGMessage.from.nickName,content,1,extra,function(err,body){
+		jpushWrap(sendNo,member.loginName,fromLoginName,content,function(err,body){
 			if(err){
 				logger.error(err);
 			}

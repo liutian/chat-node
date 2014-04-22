@@ -13,11 +13,19 @@ exports.send = function (gmessage, cb) {
 
 	if (gmessage.to) {
 		Group.findOne({_id : gmessage.to,orgId : gmessage.orgId,members : gmessage.from})
+			.populate({
+				path : 'members',
+				select : 'refId loginName nickName profilePhoto'
+			})
 			.exec( function (err, group) {
 			_send(err, group,gmessage, cb);
 		});
 	} else {
 		Group.findOne({refId: gmessage.toRefId, orgId: gmessage.orgId,members : gmessage.from})
+			.populate({
+				path : 'members',
+				select : 'refId loginName nickName profilePhoto'
+			})
 			.exec( function (err, group) {
 			_send(err, group,gmessage, cb);
 		});

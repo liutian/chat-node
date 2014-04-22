@@ -1,8 +1,10 @@
 {
 	"jpush" : {
-		"groupChatSendNo" : 0,
-		"whisperSendNo" : 0,
-		"appkey" : "0610b854acd47eb5c7656e21",
-		"masterSecret" : "9073587a5e98f3fda73a5d54"
+		"groupChatSendNo" : 1,
+		"whisperSendNo" : 1,
+		"extrasWhisperType" : 0,
+		"extrasGroupType" : 5,
+		"appkey" : "c50b36a83754f7d8ec0d46ec",
+		"masterSecret" : "24b59200af22fa1ad10ff662"
 	}
 }

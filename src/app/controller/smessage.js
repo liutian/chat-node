@@ -1,12 +1,10 @@
 var smessageService = require('../service/SMessageService'),
 	log4js = require('log4js'),
-	JPush = require('jpush-sdk'),
 	moment = require('moment'),
-	_ = require('underscore');
+	_ = require('underscore'),
+	jpushWrap = require('../common/jpushWrap');
 
 var logger = log4js.getLogger();
-var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: global.prop.jpush.masterSecret});
-
 
 module.exports = function(app){
 	app.post('/api/smessage',function(req,res){
@@ -97,47 +95,53 @@ function sendCallBack(err,mSMessage,toUser,res,req){
 		return;
 	}
 
-	mSMessage.from = {
-		refId : req.session.user.refId,
-		nickName : req.session.user.nickName,
-		profilePhoto : req.session.user.profilePhoto
-	};
-	mSMessage.to = {
-		refId : toUser.refId,
-		nickName : toUser.nickName,
-		profilePhoto : toUser.profilePhoto
-	}
+//	mSMessage.from = {
+//		refId : req.session.user.refId,
+//		nickName : req.session.user.nickName,
+//		profilePhoto : req.session.user.profilePhoto
+//	};
+//	mSMessage.to = {
+//		refId : toUser.refId,
+//		nickName : toUser.nickName,
+//		profilePhoto : toUser.profilePhoto,
+//		loginName : toUser.loginName
+//	}
+
 	res.json(convertMessage(mSMessage));
 
-//	mobilePush(mSMessage);
+	var fromLoginName = req.session.user.loginName;
+	var fromRefId = req.session.user.refId;
+	mobilePush(mSMessage,toUser.loginName,fromLoginName,fromRefId);
 }
 
-function mobilePush(mSMessage){
-	var content = mSMessage.contentText,extra = {};
+function mobilePush(mSMessage,alias,fromLoginName,fromRefId){
+	var content = {message : mSMessage.contentText,n_extras : {}};
 
 	if(mSMessage.type == 1){
-		content = '[图片]';
-		extra.path = mSMessage.filePath[1];
+		content.message = '[图片]';
+		content.n_extras.path = mSMessage.filePath[1];
 	}else if(mSMessage.type == 2){
-		content = '[文件]';
+		content.message = '[文件]';
 		if(mSMessage.fileName.length > 20){
 			var suffix = mSMessage.fileName.lastIndexOf('.' + 1);
-			extra.fn = mSMessage.fileName.substr(0,20 - suffix.length - 1) + '.' + suffix;
+			content.n_extras.fn = mSMessage.fileName.substr(0,20 - suffix.length - 1) + '.' + suffix;
 		}else{
-			extra.fn = mSMessage.fileName;
+			content.n_extras.fn = mSMessage.fileName;
 		}
-		extra.path = mSMessage.filePath[0];
+		content.n_extras.path = mSMessage.filePath[0];
 	}else if (content.length > 50){
-		content = content.substr(0,50);
-		extra.id = mSMessage.id;
+		content.message = content.message.substr(0,50);
+		content.n_extras.id = mSMessage.id;
 	}
 
-	extra.ct = mSMessage.type;
-	extra.uid = mSMessage.from.refId;
-	extra.ios = {sound : 'default'};
+	content.n_extras.ct = mSMessage.type;
+	content.n_extras.uid = fromRefId;
+	content.n_extras.ios = {sound : 'default'};
+	content.n_extras.type = global.prop.jpush.extrasWhisperType;
 
 	var sendNo = global.prop.jpush.whisperSendNo;
-	jpushClient.sendNotificationWithAlias(sendNo,mSMessage.to.loginName,mSMessage.from.nickName,content,1,extra,function(err,body){
+
+	jpushWrap(sendNo,alias,fromLoginName,content,function(err,body){
 		if(err){
 			logger.error(err);
 		}
