@@ -23,87 +23,182 @@ exports.create = function (group, cb) {
     }
 
 	if(group.founder){
-	    User.findById(group.founder, function (err, user) {
-		    createCallBack(err,user,group,cb);
-	    });
+		_create(group,cb);
 	}else{
-		User.findOne({refId : group.founderRefId},function(err,user){
-			createCallBack(err,user,group,cb);
+		Group.findOne({refId : group.refId,orgId : group.orgId},'name',function(err,group){
+			 if(err){
+				 cb(err);
+			 }else if(group){
+				 cb(new BaseError('this group exists already founderRefId:%s  orgId:%s',group.founderRefId,group.orgId));
+			 }else{
+				 _create(group,cb);
+			 }
 		});
 	}
 }
 
-function createCallBack(err,user,group,cb){
-	if (err) {
-		cb(err);
-	} else if (!user) {
-		cb(new BaseError('this user not find userId:%s', group.founder));
-	} else {
-		group.founder = user.id;
-		var mGroup = new Group(group);
-		mGroup.members.push(group.founder);
-		mGroup.letterName = letter(mGroup.name);
-		mGroup.save(function (err) {
-			cb(err);
+exports.edit = function (group, cb) {
+	if(!groupValidate(group,cb)) return;
+
+	if(group.founder){
+		_edit(group.founder,group,cb);
+	}else{
+		User.findOne({refId : group.founderRefId},'loginName',function(err,user){
+			if(err){
+				cb(err);
+			}else if(!user){
+				cb(new BaseError('this user not exists refId:%s',group.founderRefId));
+			}else{
+				_edit(user.id,group,cb);
+			}
 		});
 	}
 }
 
-exports.disband = function (userId, groupId, cb) {
-    Group.findById(groupId, function (err, group) {
-        if (!group) {
-            cb(new BaseError('this group not exists groupId:%s', groupId));
-        } else if (group.founder != userId) {
-            cb(new BaseError('you have no right to delete this group , userId:%s groupId:%s', userId, groupId));
-        } else {
-            group.remove(cb);
-        }
-    });
+exports.disband = function (group, cb) {
+	if(!groupValidate(group,cb)) return;
+
+	if(group.founder){
+		_disband(group.founder,group,cb);
+	}else{
+		User.findOne({refId : group.founderRefId},'loginName',function(err,user){
+			if(err){
+				cb(err);
+			}else if(!user){
+				cb(new BaseError('this user not exists refId:%s',group.founderRefId));
+			}else{
+				_disband(user.id,group,cb);
+			}
+		});
+	}
+
 }
 
-exports.join = function (userId, groupId, cb) {
-    Group.findById(groupId, function (err, group) {
-        if (!group) {
-            cb(new BaseError('this group not exists ,groupId:%s', groupId));
-        } else {
-            User.findById(userId,function(err,user){
-                if(err){
-                    cb(err);
-                }else if(!user){
-                    cb(new BaseError('this user not exists userId:%',userId));
-                }else if(user.orgId != group.orgId){
-                    cb(new BaseError('this group not belong to this org ,userId:%s orgId:%s ',userId,user.orgId));
-                }else{
-                    Group.findByIdAndUpdate(groupId, {$addToSet: {members: userId}}, cb);
-                }
-            });
-        }
-    });
+exports.join = function (userId,userRefId,group, cb) {
+	if(userId){
+		_join(userId,group,cb);
+	}else{
+		User.findOne({refId : userRefId},'loginName',function(err,user){
+			if(err){
+				cb(err);
+			}else if(!user){
+				cb(new BaseError('this user not exists refId:%s',userRefId));
+			}else{
+				_join(user.id,group,cb);
+			}
+		});
+	}
 }
 
-exports.exit = function (userId, groupId, cb) {
-    Group.findById(groupId, function (err, group) {
-        if (!group) {
-            cb(new BaseError('this group not exists ,groupId:%s', groupId));
-        } else if(group.founder == userId){
-            cb(new BaseError('you can not exit this group because you are founder'));
-        }else{
-            Group.findByIdAndUpdate(groupId, {$pull: {members: userId}}, cb);
-        }
-    });
+exports.exit = function (userId,userRefId, group, cb) {
+	if(userId){
+		_exit(userId,group,cb);
+	}else{
+		User.findOne({refId : userRefId},'loginName',function(err,user){
+			if(err){
+				cb(err);
+			}else if(!user){
+				cb(new BaseError('this user not exists refId:%s',userRefId));
+			}else{
+				_exit(user.id,group,cb);
+			}
+		});
+	}
 }
 
-exports.editGroup = function (userId,group, cb) {
+function _create(group,cb){
+	if(group.founder){
+		createCallBack(group.founder,group,cb);
+	}else{
+		User.findOne({refId : group.founderRefId,orgId : group.orgId},'loginName',function(err,user){
+			if(err){
+				cb(err);
+			}else if(user){
+				cb(new BaseError('this user not find refId:%s',group.founderRefId));
+			}else{
+				createCallBack(user.id,group,cb);
+			}
+		});
+	}
+}
+
+function createCallBack(founder,group,cb){
+	group.founder = founder;
+	group.letterName = letter(group.name);
+	group.members = [founder];
+
+	Group.create(group,cb);
+}
+
+function groupValidate(group,cb){
+	if(!group.id && !group.refId){
+		cb(new BaseError('need id or refId'));
+		return false;
+	}
+	if(!group.founder && !group.founderRefId){
+		cb(new BaseError('need founder or founderRefId'));
+		return false;
+	}
+	if(group.founderRefId && !group.orgId){
+		cb(new BaseError('need orgId'));
+		return false;
+	}
+	return true;
+}
+
+function _edit(userId,group,cb){
 	if(group.id){
-		Group.findById(group.id,function(err,mgroup){
+		Group.findOne({_id : group.id,members : userId},function(err,mgroup){
 			editGroupCallBack(err,mgroup,group,cb);
 		});
 	}else if(group.refId){
-		Group.findOne({refId : group.refId},function(err,mgroup){
+		Group.findOne({refId : group.refId,orgId : group.orgId,members : userId},function(err,mgroup){
 			editGroupCallBack(err,mgroup,group,cb);
-		})
+		});
+	}
+}
+
+function _join(userId,group,cb){
+	if(group.id){
+		Group.findByIdAndUpdate(group.id, {$addToSet: {members: userId}}, cb);
+	}else if(group.orgId && group.refId){
+		Group.findOneAndUpdate({refId : group.refId,orgId : group.orgId}, {$addToSet: {members: userId}}, cb);
 	}else{
-		cb(new BaseError('need id or refId'));
+		cb(new BaseError('need id or (refId and orgId)'))
+	}
+}
+
+function _disband(userId,group,cb){
+	if(group.id){
+		Group.findOne({_id : group.id,members : userId},'founder',function(err,mgroup){
+			disbandCallBack(err,mgroup,userId,cb);
+		});
+	}else if(group.refId){
+		Group.findOne({refId : group.refId,orgId : group.orgId,members : userId},'founder',function(err,mgroup){
+			disbandCallBack(err,mgroup,userId,cb);
+		});
+	}
+}
+
+function _exit(userId,group,cb){
+	if(group.id){
+		Group.findByIdAndUpdate(group.id, {$pull: {members: userId}}, cb);
+	}else if(group.refId && group.orgId){
+		Group.findOneAndUpdate({refId : group.refId,orgId : group.orgId}, {$pull: {members: userId}}, cb);
+	}else{
+		cb(new BaseError('need id or (refId and orgId)'))
+	}
+}
+
+function disbandCallBack(err,mgroup,userId,cb){
+	if(err){
+		cb(err);
+	}else if(!mgroup){
+		cb(new BaseError('this group not exists groupId:%s', groupId));
+	}else if (mgroup.founder != userId) {
+		cb(new BaseError('you have no right to delete this group , userId:%s groupId:%s', userId, groupId));
+	} else {
+		mgroup.remove(cb);
 	}
 }
 
@@ -111,7 +206,7 @@ function editGroupCallBack(err,mgroup,group,cb){
 	if(err){
 	   cb(err);
 	}else if(!mgroup) {
-		cb(new BaseError('this group not exists ,id:%s', group.id || group.refId));
+		cb(new BaseError('this group not exists or you have no right ,id:%s', group.id || group.refId));
 	} else {
 		if(group.name){
 			mgroup.name = group.name;
@@ -125,28 +220,7 @@ function editGroupCallBack(err,mgroup,group,cb){
 	}
 }
 
-exports.findGroupsAboutUser = function(userId,cb){
-    Group.find({members : {$all : [userId]}}).populate({
-        path : 'founder members',
-        select : 'nickName profilePhoto sex letterName'
-    }).exec(function(err,groups){
-        if(err){
-            cb(err);
-        }else{
-            cb(null,groups);
-        }
-    });
-}
-
 function createValidate(group, cb) {
-	if(!group.refId){
-		cb(new BaseError('need refId'));
-		return false;
-	}
-    if (!group.orgId) {
-        cb(new BaseError('need orgId'));
-        return false;
-    }
     if (!group.name) {
         cb(new BaseError('need group name'));
         return false;
@@ -155,6 +229,10 @@ function createValidate(group, cb) {
         cb(new BaseError('need group founder or founderRefId'));
         return false;
     }
+	if(group.founderRefId && (!group.refId ||  !group.orgId)){
+		cb(new BaseError('need orgId and orgId'));
+		return false;
+	}
     return true;
 }
 
