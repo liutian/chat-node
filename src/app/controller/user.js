@@ -64,6 +64,24 @@ module.exports = function(app){
 		});
 	});
 
+	/**
+	 * refId
+	 */
+	app.post('/trust-api/delUser',function(req,res){
+		userService.trustDelete(req.body.refId,1,function(err){
+			ctrlUtil.process(res,err,logger);
+		});
+	});
+
+	/**
+	 * refId
+	 */
+	app.post('/trust-api/lockUser',function(req,res){
+		userService.trustLock(req.body.refId,1,function(err){
+			ctrlUtil.process(res,err,logger);
+		});
+	});
+
 }
 
 

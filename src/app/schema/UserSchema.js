@@ -23,7 +23,17 @@ var UserSchema = new Schema({
 	whisperSession : Schema.Types.Mixed,
 	whisperSessionUnreadCount : Schema.Types.Mixed,
 	groupSession : Schema.Types.Mixed,
-	groupSessionUnreadCount : Schema.Types.Mixed
+	groupSessionUnreadCount : Schema.Types.Mixed,
+	delFlag : {
+		type : Number,
+		enum : [0,1],
+		default : 0
+	},
+	lockFlag : {
+		type : Number,
+		enum : [0,1],
+		default : 0
+	}
 });
 
 mongoose.model('user', UserSchema);

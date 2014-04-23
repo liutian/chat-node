@@ -195,6 +195,14 @@ exports.editUser = function (user, cb) {
     });
 }
 
+exports.trustDelete = function(refId,delFlag,cb){
+ 	User.findOneAndUpdate({refId : refId},{delFlag : delFlag},cb);
+}
+
+exports.trustLock = function(refId,lockFlag,cb){
+	User.findOneAndUpdate({refId : refId},{lockFlag : lockFlag},cb);
+}
+
 exports.findAllUsers = function(orgId,cb){
     if(!_.isNumber(orgId)){
         cb(new BaseError('orgId must be a Number %s',orgId));
