@@ -8,7 +8,7 @@ var logger = log4js.getLogger();
 module.exports = function(app){
 
 	/**
-	 * refId,orgId,loginName,pwd,nickName,profilePhoto,sex
+	 * refId,orgId,loginName,pwd,[nickName],[profilePhoto],[sex]
 	 */
 	app.post('/trust-api/signUp',function(req,res){
 		var orgId = req.body.orgId;
@@ -49,7 +49,7 @@ module.exports = function(app){
 	});
 
 	/**
-	 *  refId,orgId,loginName,pwd,nickName,profilePhoto,sex
+	 *  refId,[pwd],[nickName],[profilePhoto],[sex]
 	 */
 	app.post('/trust-api/editUser',function(req,res){
 		var refId = req.body.refId;
