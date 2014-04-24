@@ -57,11 +57,11 @@ app.use('/api',function(req,res,next){
 	}
 });
 
-app.user('/trust-api',function(req,res,next){
+app.use('/trust-api',function(req,res,next){
  	var trust = false,trustIP = global.prop.trustIP;
 
 	for(var i = 0;i < trustIP.length;i++){
-		if(req.ip == ip){
+		if(req.ip == trustIP[i]){
 			trust = true;
 			break;
 		}

@@ -25,10 +25,10 @@ exports.create = function (group, cb) {
 	if(group.founder){
 		_create(group,cb);
 	}else{
-		Group.findOne({refId : group.refId,orgId : group.orgId},'name',function(err,group){
+		Group.findOne({refId : group.refId,orgId : group.orgId},'name',function(err,mgroup){
 			 if(err){
 				 cb(err);
-			 }else if(group){
+			 }else if(mgroup){
 				 cb(new BaseError('this group exists already founderRefId:%s  orgId:%s',group.founderRefId,group.orgId));
 			 }else{
 				 _create(group,cb);
@@ -42,6 +42,8 @@ exports.edit = function (group, cb) {
 
 	if(group.founder){
 		_edit(group.founder,group,cb);
+	}else if(group.founderRefId == -1){
+		_edit(group.founderRefId,group,cb);
 	}else{
 		User.findOne({refId : group.founderRefId},'loginName',function(err,user){
 			if(err){
@@ -60,6 +62,8 @@ exports.disband = function (group, cb) {
 
 	if(group.founder){
 		_disband(group.founder,group,cb);
+	}else if(group.founderRefId == -1){
+		_disband(group.founderRefId,group,cb);
 	}else{
 		User.findOne({refId : group.founderRefId},'loginName',function(err,user){
 			if(err){
@@ -71,7 +75,6 @@ exports.disband = function (group, cb) {
 			}
 		});
 	}
-
 }
 
 exports.join = function (userId,userRefId,group, cb) {
@@ -106,6 +109,10 @@ exports.exit = function (userId,userRefId, group, cb) {
 	}
 }
 
+exports.clearGroupMember = function(refId,orgId,cb){
+	Group.findOneAndUpdate({refId : refId,orgId : orgId},{$set : {members : []}},cb);
+}
+
 function _create(group,cb){
 	if(group.founder){
 		createCallBack(group.founder,group,cb);
@@ -113,7 +120,7 @@ function _create(group,cb){
 		User.findOne({refId : group.founderRefId,orgId : group.orgId},'loginName',function(err,user){
 			if(err){
 				cb(err);
-			}else if(user){
+			}else if(!user){
 				cb(new BaseError('this user not find refId:%s',group.founderRefId));
 			}else{
 				createCallBack(user.id,group,cb);
@@ -125,7 +132,11 @@ function _create(group,cb){
 function createCallBack(founder,group,cb){
 	group.founder = founder;
 	group.letterName = letter(group.name);
-	group.members = [founder];
+	if(_.isArray(group.members)){
+		group.members.push(founder);
+	}else{
+		group.members = [founder];
+	}
 
 	Group.create(group,cb);
 }
@@ -148,11 +159,17 @@ function groupValidate(group,cb){
 
 function _edit(userId,group,cb){
 	if(group.id){
-		Group.findOne({_id : group.id,members : userId},function(err,mgroup){
+		var conditions = {_id : group.id};
+		if(userId != -1) conditions.members = userId;
+
+		Group.findOne(conditions,function(err,mgroup){
 			editGroupCallBack(err,mgroup,group,cb);
 		});
 	}else if(group.refId){
-		Group.findOne({refId : group.refId,orgId : group.orgId,members : userId},function(err,mgroup){
+		var conditions = {refId : group.refId,orgId : group.orgId};
+		if(userId != -1) conditions.members = userId;
+
+		Group.findOne(conditions,function(err,mgroup){
 			editGroupCallBack(err,mgroup,group,cb);
 		});
 	}
@@ -170,11 +187,17 @@ function _join(userId,group,cb){
 
 function _disband(userId,group,cb){
 	if(group.id){
-		Group.findOne({_id : group.id,members : userId},'founder',function(err,mgroup){
+		var conditions = {_id : group.id};
+		if(userId != -1) conditions.members = userId;
+
+		Group.findOne(conditions,'founder',function(err,mgroup){
 			disbandCallBack(err,mgroup,userId,cb);
 		});
 	}else if(group.refId){
-		Group.findOne({refId : group.refId,orgId : group.orgId,members : userId},'founder',function(err,mgroup){
+		var conditions = {refId : group.refId,orgId : group.orgId};
+		if(userId != -1) conditions.members = userId;
+
+		Group.findOne(conditions,'founder',function(err,mgroup){
 			disbandCallBack(err,mgroup,userId,cb);
 		});
 	}

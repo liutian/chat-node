@@ -9,5 +9,8 @@
 	},
 	"trustIP" : [
 		"127.0.0.1"
-	]
+	],
+	"mongodb" : {
+		"url" : "mongodb://localhost/chat1"
+	}
 }

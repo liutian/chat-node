@@ -73,7 +73,7 @@ module.exports = function(app){
 
 	app.post('/api/gHistorySessionClearZero',function(req,res){
 		if(!req.body.id && !req.body.refId){
-			req.json({code : 10001,msg : 'need id or refId'});
+			res.json({code : 10001,msg : 'need id or refId'});
 		}
 
 		var currUserId = req.session.user.id;

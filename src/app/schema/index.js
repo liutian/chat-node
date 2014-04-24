@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/chat');
+mongoose.connect(global.prop.mongodb.url);
 require('./GMessageSchema.js');
 require('./SMessageSchema.js');
 require('./AttachmentSchema.js');

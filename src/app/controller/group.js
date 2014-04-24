@@ -7,7 +7,7 @@ var logger = log4js.getLogger();
 
 module.exports = function(app){
 	/**
-	 * refId,orgId,founderRefId,name,[profilePhoto]
+	 * refId,orgId,name,founderRefId,name,[profilePhoto]
 	 */
 	app.post('/trust-api/createGroup',function(req,res){
 		groupService.create(req.body,function(err){
@@ -16,7 +16,7 @@ module.exports = function(app){
 	});
 
 	/**
-	 *  refId,founderRefId,orgId,[name],[profilePhoto]
+	 *  refId,orgId,founderRefId,[name],[profilePhoto]
 	 */
 	app.post('/trust-api/editGroup',function(req,res){
 		groupService.edit(req.body,function(err){
@@ -48,6 +48,15 @@ module.exports = function(app){
 	app.post('/trust-api/exitGroup',function(req,res){
 		var currUserId = req.body.currUserId;
 		groupService.exit(null,req.body.userRefId,req.body,function(err){
+			ctrlUtil.process(res,err,logger);
+		});
+	});
+
+	/**
+	 * orgId,refId
+	 */
+	app.post('/trust-api/clearGroupMember',function(req,res){
+		groupService.clearGroupMember(req.body.refId,req.body.orgId,function(err){
 			ctrlUtil.process(res,err,logger);
 		});
 	});
