@@ -190,17 +190,15 @@ exports.editUser = function (user, cb) {
         if (user.sex) {
             data.sex = user.sex;
         }
+	    if(_.isNumber(user.delFlag)){
+		    data.delFlag = user.delFlag;
+	    }
+	    if(_.isNumber(user.lockFlag)){
+		    data.lockFlag = user.lockFlag;
+	    }
 
         data.save(cb);
     });
-}
-
-exports.trustDelete = function(refId,delFlag,cb){
- 	User.findOneAndUpdate({refId : refId},{delFlag : delFlag},cb);
-}
-
-exports.trustLock = function(refId,lockFlag,cb){
-	User.findOneAndUpdate({refId : refId},{lockFlag : lockFlag},cb);
 }
 
 exports.findAllUsers = function(orgId,cb){

@@ -18,7 +18,7 @@ var UserSchema = new Schema({
         name : String,
         members : [{type : Schema.Types.ObjectId, ref : 'user'}]
     }],
-    groups : [{type : Schema.Types.ObjectId ,ref : 'group'}],
+//    groups : [{type : Schema.Types.ObjectId ,ref : 'group'}],
     createDate : {type : Date , default : Date.now},
 	whisperSession : Schema.Types.Mixed,
 	whisperSessionUnreadCount : Schema.Types.Mixed,

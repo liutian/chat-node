@@ -15,12 +15,12 @@ module.exports = function(app){
 		var refId = req.body.refId;
 
 		if (!orgId) {
-			req.json({code : 10001,msg : 'need orgId'});
+			res.json({code : 10001,msg : 'need orgId'});
 			return;
 		}
 
 		if (!refId) {
-			req.json({code : 10001,msg : 'need refId'});
+			res.json({code : 10001,msg : 'need refId'});
 			return;
 		}
 
@@ -49,35 +49,17 @@ module.exports = function(app){
 	});
 
 	/**
-	 *  refId,[pwd],[nickName],[profilePhoto],[sex]
+	 *  refId,[delFlag],[lockFlag],[pwd],[nickName],[profilePhoto],[sex]
 	 */
 	app.post('/trust-api/editUser',function(req,res){
 		var refId = req.body.refId;
 
 		if (!refId) {
-			req.json({code : 10001,msg : 'need refId'});
+			res.json({code : 10001,msg : 'need refId'});
 			return;
 		}
 
 		userService.editUser(req.body,function(err){
-			ctrlUtil.process(res,err,logger);
-		});
-	});
-
-	/**
-	 * refId
-	 */
-	app.post('/trust-api/delUser',function(req,res){
-		userService.trustDelete(req.body.refId,1,function(err){
-			ctrlUtil.process(res,err,logger);
-		});
-	});
-
-	/**
-	 * refId
-	 */
-	app.post('/trust-api/lockUser',function(req,res){
-		userService.trustLock(req.body.refId,1,function(err){
 			ctrlUtil.process(res,err,logger);
 		});
 	});
