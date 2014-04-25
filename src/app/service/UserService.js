@@ -178,7 +178,7 @@ exports.editUser = function (user, cb) {
 	    if(user.pwd){
 		    var md5 = crypto.createHash('md5');
 		    md5.update(user.pwd);
-		    user.pwd = md5.digest('hex');
+		    data.pwd = md5.digest('hex');
 	    }
         if (user.nickName) {
             data.nickName = user.nickName;
