@@ -61,4 +61,13 @@ module.exports = function(app){
 		});
 	});
 
+	/**
+	 * orgId,refId,newRefId,oldRefId
+	 */
+	app.post('/trust-api/handOver',function(req,res){
+		groupService.handOver(req.body,function(err){
+			ctrlUtil.process(res,err,logger);
+		});
+	});
+
 }

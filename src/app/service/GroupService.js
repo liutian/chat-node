@@ -113,6 +113,78 @@ exports.clearGroupMember = function(refId,orgId,cb){
 	Group.findOneAndUpdate({refId : refId,orgId : orgId},{$set : {members : []}},cb);
 }
 
+exports.handOver = function(group,cb){
+	if(group.oldFounder){
+		User.findById(group.oldFounder,function(err,oldUser){
+			if(err){
+				cb(err);
+			}else if(!oldUser){
+				cb(new BaseError('this user not find oldFounder:%s',group.oldFounder));
+			}else{
+				User.findById(group.newFounder,function(err,newUser){
+					if(err){
+						cb(err);
+					}else if(!newUser){
+						cb(new BaseError('this user not find newFounder:%s',group.newFounder));
+					}else{
+						handOverCallBack(oldUser,newUser,group,cb);
+					}
+				});
+			}
+		});
+	}else{
+		User.findOne({refId : group.oldFounderRefId},function(err,oldUser){
+			if(err){
+				cb(err);
+			}else if(!oldUser){
+				cb(new BaseError('this user not find oldFounderRefId:%s',group.oldFounderRefId));
+			}else{
+				User.findOne({refId : group.newFounderRefId},function(err,newUser){
+					if(err){
+						cb(err);
+					}else if(!newUser){
+						cb(new BaseError('this user not find newFounderRefId:%s',group.newFounderRefId));
+					}else{
+						handOverCallBack(oldUser,newUser,group,cb);
+					}
+				});
+			}
+		});
+	}
+}
+
+function handOverCallBack(oldUser,newUser,group,cb){
+	var updater = {
+		founder : newUser.id,
+		founderRefId: newUser.refId,
+		$addToSet:{
+			members : newUser.id
+		}
+	}
+
+	if(group.id){
+		Group.findOne({_id : group.id,founder : oldUser.id},function(err,mgroup){
+			if(err){
+				cb(err);
+			}else if(!mgroup){
+				cb(new BaseError('you have not right to hand over this group id:%s',group.id));
+			}else{
+				Group.findByIdAndUpdate(mgroup.id,updater,cb);
+			}
+		});
+	}else{
+		Group.findOne({refId : group.refId,orgId : group.orgId,founder : oldUser.id},function(err,mgroup){
+			if(err){
+				cb(err);
+			}else if(!mgroup){
+				cb(new BaseError('you have not right to hand over this group refId:%s orgId:%s',group.refId,group.orgId));
+			}else{
+				Group.findByIdAndUpdate(mgroup.id,updater,cb);
+			}
+		});
+	}
+}
+
 function _create(group,cb){
 	if(group.founder){
 		createCallBack(group.founder,group,cb);
@@ -160,14 +232,14 @@ function groupValidate(group,cb){
 function _edit(userId,group,cb){
 	if(group.id){
 		var conditions = {_id : group.id};
-		if(userId != -1) conditions.members = userId;
+		if(userId != -1) conditions.founder = userId;
 
 		Group.findOne(conditions,function(err,mgroup){
 			editGroupCallBack(err,mgroup,group,cb);
 		});
 	}else if(group.refId){
 		var conditions = {refId : group.refId,orgId : group.orgId};
-		if(userId != -1) conditions.members = userId;
+		if(userId != -1) conditions.founder = userId;
 
 		Group.findOne(conditions,function(err,mgroup){
 			editGroupCallBack(err,mgroup,group,cb);
