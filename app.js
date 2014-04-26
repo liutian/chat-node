@@ -1,18 +1,20 @@
-process.env.NODE_ENV = 'development';
-/**
- * Module dependencies.
- */
-global.appData = {};
+//全局应用级别的数据对象
+global.appData = {cwd : __dirname};
 
+//加载，并读取配置文件
 require('./src/prop.js');
 
+//启动日志系统
 require('./src/log')({
-	dir : __dirname + '/log/',
-	level : process.env.NODE_ENV != 'development' ? 'ERROR' : ''
+	console : global.prop.log.console === true,
+	dir : global.prop.log.dir || __dirname + '/log/',
+	level : global.prop.log.level || 'ERROR'
 });
 
+//启动数据访问系统
 require('./src/app/schema');
 
+//web
 var http = require('http'),
 	express = require('./src/app/express'),
 	log4js = require('log4js'),
@@ -20,7 +22,6 @@ var http = require('http'),
 	socketIO = require('./src/app/socket.io');
 
 var logger = log4js.getLogger();
-
 
 var d = domain.create();
 //监听domain的错误事件

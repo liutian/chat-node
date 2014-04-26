@@ -4,8 +4,10 @@ var socketIO = require('socket.io'),
 	cookie = require('../../node_modules/express/node_modules/cookie'),
 	utils = require('../../node_modules/express/node_modules/connect/lib/utils');
 
+var sessionKey = global.appData.sessionKey;
+
 module.exports = function (server) {
-	var io = socketIO.listen(server);
+	var io = socketIO.listen(server,global.prop.socketIO);
 
 	global.appData.socketIO = {sockets: {}, io: io};
 
@@ -36,12 +38,12 @@ function saveSockets(socket,io) {
 	if (!io.handshaken[socketId]) return;
 
 	var cookies = cookie.parse(io.handshaken[socketId].headers.cookie);
-	var signedCookies = utils.parseSignedCookies(cookies, "liuss123");
+	var signedCookies = utils.parseSignedCookies(cookies, global.appData.cookieSecret);
 	signedCookies = utils.parseJSONCookies(signedCookies);
 
-	if (!signedCookies.sid) return;
+	if (!signedCookies[sessionKey]) return;
 
-	express.sessionStore.get(signedCookies.sid, function (err, sess) {
+	express.sessionStore.get(signedCookies[sessionKey], function (err, sess) {
 		if (!err && sess && sess.user) {
 			if (!_sockets[sess.user.id]) {
 				_sockets[sess.user.id] = [];

@@ -1,4 +1,37 @@
 {
+	"log" : {
+		"_dir" : "/home/liuss",
+		"console" : true,
+		"level" : "ERROR"
+	},
+	"trustIP" : [
+		"127.0.0.1"
+	],
+	"express" : {
+		"_static" : "默认当前项目app.js所在目录/static,可选值为一个决定路径" ,
+		"_views" : "默认当前项目app.js所在目录/views,可选值为一个绝对路径",
+		"_logger" : "默认禁用logger中间件,可选值:dev,default,..",
+		"_errorHandler" : "禁用errorHandler,可选值:true,false",
+		"sessionKey" : "sid",
+		"port" : 3000,
+		"cookieSecret" : "liuss123"
+	},
+	"socketIO" : {
+		"log" : false,
+		"log level" : 3
+	},
+	"mongodb" : {
+		"url" : "mongodb://localhost/chat"
+	},
+	"mongoose" : {
+		"_debug" : "默认禁用日志，可选值为:true,false",
+		"debug" : false
+	},
+	"redis" : {
+		"host" : "localhost",
+		"port" : 6379,
+		"sessionTTL" : 1800
+	},
 	"jpush" : {
 		"groupChatSendNo" : 1,
 		"whisperSendNo" : 1,
@@ -6,11 +39,5 @@
 		"extrasGroupType" : 5,
 		"appkey" : "c50b36a83754f7d8ec0d46ec",
 		"masterSecret" : "24b59200af22fa1ad10ff662"
-	},
-	"trustIP" : [
-		"127.0.0.1"
-	],
-	"mongodb" : {
-		"url" : "mongodb://localhost/chat1"
 	}
 }

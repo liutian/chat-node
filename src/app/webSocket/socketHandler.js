@@ -9,14 +9,15 @@ var smessageService = require('../service/SMessageService.js'),
 
 var logger = log4js.getLogger();
 var jpushClient = JPush.build({appkey: global.prop.jpush.appkey, masterSecret: global.prop.jpush.masterSecret});
+var sessionKey = global.appData.sessionKey;
 
 exports.authorizationHandler = function(handshakeData, callback) {
 	if (handshakeData.headers.cookie) {
 		var cookies = cookie.parse(handshakeData.headers.cookie);
-		var signedCookies = utils.parseSignedCookies(cookies, "liuss123");
+		var signedCookies = utils.parseSignedCookies(cookies, global.appData.cookieSecret);
 		signedCookies = utils.parseJSONCookies(signedCookies);
-		if (signedCookies.sid) {
-			express.sessionStore.get(signedCookies.sid, function (err, sess) {
+		if (signedCookies[sessionKey]) {
+			express.sessionStore.get(signedCookies[sessionKey], function (err, sess) {
 				if (!err && sess && sess.user) {
 					callback(null, true);
 				} else {

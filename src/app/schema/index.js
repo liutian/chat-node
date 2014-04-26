@@ -5,4 +5,7 @@ require('./SMessageSchema.js');
 require('./AttachmentSchema.js');
 require('./GroupSchema.js');
 require('./UserSchema.js');
-mongoose.set('debug',true);
+
+if(global.prop.mongoose.debug === true){
+	mongoose.set('debug',true);
+}
